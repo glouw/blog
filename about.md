@@ -8,7 +8,7 @@ concepts such as graphics engines, virtual machines, compilers,
 image processing, and video game development.
 
 I have four years of engineering experience, some of which I spent in the
-class III medical industry and heavy duty machinery industry.
+class III medical device industry and heavy duty machinery industry.
 
 I most recently worked as a firmware developer doing silicon validation for Intel.
 
