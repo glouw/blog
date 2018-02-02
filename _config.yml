@@ -1,8 +1,3 @@
-### your site title here
-
 title: Gustav Louw
 
-
-### let's use the minima theme (see https://github.com/jekyll/minima)
-
-theme: minima
+theme: minimal
