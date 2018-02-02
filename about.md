@@ -1,7 +1,8 @@
 ---
 layout: page
-title: About
 permalink: /about/
 ---
 
-hi
+Graduated BASc. Applied Sciences in Mechatronic Systems Engineering.
+
+Graphics engine enthusiast.
