@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: Minimal
 title: Test
 tagline: Tagline
 ---
