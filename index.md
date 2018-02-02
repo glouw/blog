@@ -4,6 +4,8 @@ layout: default
 layout: home
 ---
 
-There are some explanations here of what you'd find at my [Github page.](https://github.com/glouw)
+These are some explanations of what you'd find at my [Github page.](https://github.com/glouw)
 
-I check in from time to time.
+Contact info at the bottom if you got questions - I'm more than happy to help
+if you are trying to learn something here.
+
