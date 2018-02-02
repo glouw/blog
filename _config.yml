@@ -1,14 +1,8 @@
 ### your site title here
 
-title: Your Site Title
+title: Gustav Louw
 
 
 ### let's use the minima theme (see https://github.com/jekyll/minima)
 
 theme: minima
-
-
-### exclude the instructions / write-up in the README.md
-
-exclude:
-- README.md
