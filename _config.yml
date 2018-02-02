@@ -1,7 +1,14 @@
-title: Gustav Louw
+### your site title here
 
-# Build settings
-markdown: kramdown
+title: Your Site Title
+
+
+### let's use the minima theme (see https://github.com/jekyll/minima)
+
 theme: minima
-plugins:
-  - jekyll-feed
+
+
+### exclude the instructions / write-up in the README.md
+
+exclude:
+- README.md
