@@ -1,0 +1,129 @@
+Chip8 is a rather obscure virtual machine written for the long forgotten COSMAC VIP in the mid-1970s.
+The virtual machine has 35 opcodes making it an ideal first emulation project.
+
+High level assemblers exist for the chip8, but not high level programming languages mainly due to limited stack space.
+
+Fortunately, with a bit of craftsmanship, a B-Like programming language is fully feasible, barring
+pointers, of course.
+
+Take the following addition function:
+
+    add(a, b)
+    {
+        return a + b;
+    }
+
+Here it is called with a bit of stack noise.
+
+    main()
+    {
+        auto a = 7;
+        auto b = 8;
+        auto c = add(1, 2);
+        auto d = 9;
+        while(1)
+        {
+            // Never leave main
+        }
+    }
+
+Chip8 reserves address space 0x000 - 0x1FF for the interpreter on the COSMAC VIP system. The first 80 bytes of
+this address range is reserved for 16 sprite fonts (0-F, including F), allowing the following set of opcodes to store
+general purpose registers V0-VE (including VE) right after the sprite fonts:
+
+    LD  VE, 0x10 ; ()
+    LD   F,   VE ; () Works with multiples of five (0x10 * 5 == 80)
+    LD [I],   VE ; ()
+
+VF is not included as it doubles as a scratchpad and V0-VE is fifteen bytes - a multiple of three.
+
+To store the next stack, change the address pointer <I> by 15 bytes (multiple of five three times) and push.
+
+    LD  VF, 0x03 ; ()
+    ADD VE,   VF ; ()
+    LD   F,   VE ; ()
+    LD [I],   VE ; ()
+
+Popping a previously stored stack works the same but in reverse:
+
+    LD  VF, 0x03 ; ()
+    SUB VE,   VF ; ()
+    LD   F,   VE ; ()
+    LD  VE,  [I] ; ()
+
+Optionally, before popping a previously stored stack, a value can be saved in VF.
+
+    LD  VF, 0x03 ; ()
+    SUB VE,   VF ; ()
+    LD  VF,   V2 ; () Saving V2 in VF
+    LD   F,   VE ; ()
+    LD  VE,  [I] ; ()
+
+Stringing these ideas together, functions can be built with a bit of register management. Looking at main():
+
+    main()
+    {
+        auto a = 7;
+        auto b = 8;
+        auto c = add(1, 2);
+        auto d = 9;
+        while(1)
+        {
+            // Never leave main
+        }
+    }
+
+When compiled without any sort of optimization, this may become:
+
+    main:
+        LD VE,0x10 ; Initial setup for call stacks - lets <I> point to location after sprite fonts
+        LD V0,0x07 ; auto a = 7
+        LD V1,0x08 ; auto b = 8
+        LD V2,0x01 ; 1st argument to add()
+        LD V3,0x02 ; 2nd argument to add()
+        LD F,VE    ; Stack push
+        LD [I],VE
+        LD VF,0x03
+        ADD VE,VF
+        LD V0,V2   ; Transfer by value arguments for function call
+        LD V1,V3
+        CALL add   ; Call the add function
+        LD V2,VF   ; Copy return value stored in VF to V2
+        LD V3,0x09 ; auto d = 9
+    WHILE7:
+        LD V4,0x01   ; while(1)
+        SNE V4,0x00  ; {
+        JP END7      ;     // Never leave main
+        JP WHILE7    ; }
+    END7:
+
+Returning to the add function, this:
+
+    add(a, b)
+    {
+        return a + b;
+    }
+
+May compile into:
+
+    add:
+        LD V2,V0   ; Scratchpad copy
+        LD V3,V1   ; Scratchpad copy
+        ADD V2,V3  ; Do the addition
+        LD VF,0x03 ; Prepare stack pop
+        SUB VE,VF
+        LD VF,V2   ; Save to VF for return
+        LD F,VE    ; Stack pop
+        LD VE,[I]
+        RET
+
+A beasty yet plausible solution to function calls on the chip8's extremely limited platform.
+Unfortunately this does not work for all data types other that word size of chip8 (one byte) which
+makes a full fitting B-Implementation (not including pointers) feasible. Have you an actual COSMAC
+running the chip8 virtual machine with this code beware that the stack frames may clobber the virtual
+machine itself.
+
+[Nevertheless, check out c8c - a single portable single source compiler for the chip8 platform](https://github.com/glouw/c8c).
+Included is a virtual machine mock-up and assembler to test it out.
+
+The code it generates is dorm room hobby quality serving as a proof of concept. Don't expect small binaries.
