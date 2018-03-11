@@ -8,10 +8,6 @@ layout: post
 
 ![](/images/lw/1.PNG)
 
-![](/images/lw/12.PNG)
-
-![](/images/lw/11.PNG)
-
 ![](/images/lw/2.PNG)
 
 ![](/images/lw/3.PNG)
@@ -21,3 +17,8 @@ layout: post
 ![](/images/lw/5.PNG)
 
 ![](/images/lw/9.PNG)
+
+![](/images/lw/12.PNG)
+
+![](/images/lw/11.PNG)
+
