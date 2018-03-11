@@ -6,7 +6,7 @@ layout: post
 
 [Download Littlewolf-1.0.zip (Windows 32/64 bit)](https://github.com/glouw/littlewolf/releases/download/littlewolf-1.0/littlewolf-1.0.zip)
 
-Littlewolf recently gained a bit of popularity on hacker news so a blog post is due.
+Littlewolf recently gained a bit of popularity on HackerNews so a blog post was due.
 Littlewolf is a Wolfenstein a software graphics engine written to be as minimal as possible. It strives to emulate
 wolfenstein and doom with a technique known as raycasting.
 
@@ -60,17 +60,26 @@ gets too close to the screen else the size will grow infinitly with close to zer
     const float normal = ray.x < 1e-2f ? 1e-2f : ray.x;
     const float size = 0.5f * focal * xres / normal;
 
+Notice, however, that this only works when the theta of the camera is set to zero. Given the camera is rotated,
+the ray index hit is to be sampled and the resulting ray is to be corrected back to the fov line else ray.x will yield
+a warped fish eye effect when turning. Correcting the above:
+
+    const Point corrected = turn(ray, -hero.theta);
+    const float normal = corrected.x < 1e-2f ? 1e-2f : corrected.x;
+    const float size = 0.5f * focal * xres / normal;
+
 The top and bottom of the wall can be found by subtracting half the size of the wall from the middle of the screen's y-resolution.
 
     const int top = (yres + size) / 2.0f;
     const int bot = (yres - size) / 2.0f;
 
-Knowing the wall height for each vertical column of the screen, rasterization may now be done. The resulting image is a little boring, but ceiling
-and floor casting will sprucen things up:
+Knowing the wall height for each vertical column of the screen, rasterization may now be done.
 
 ![](/images/lw/9.PNG)
 
-Ceiling and floor casting require a percentage of the floor in relation to the wall height. Dividing the wall in two, an expression for y can be
+Boring, yes. Ceiling and flooring casting will add a bit of flavour.
+
+Such techniques require a percentage of the floor in relation to the wall height. Dividing the wall in two, an expression for y can be
 found for everything below the middle of the wall:
 
 ![](/images/lw/12.PNG)
@@ -93,10 +102,26 @@ This yields:
 
     const float percentage = -size / (2 * (y + 1) - yres);
 
-Where 1 was added to y account for any floating point error for the flooring and ceiling you'd see with longer distances.
-Size is merely h here.
+Where one was added to y account for any floating point error for the flooring and ceiling you'd see with longer distances; h was renamed to size here too.
 
-Multiplying this percentage by -1 will yield the equation for ceiling casting.
+Multiplying this percentage by negative one will yield the equation for ceiling casting. The above equation can be wrapped into a function called
+pcast(). By dropping the negative from the call, the call can be dual purposed for ceiling and floor casting by simply prefixing the call with a negative.
+
+The trace line between the two points from the hero location (origin here) and the wall hit is delcared as:
+
+    const Line trace = { hero.where, hit.where };
+
+And the trace is lerped with the percentage from the pcast equation. The tile index of the ceiling and flooring tiles is sampled
+and the pixel is put() to the screen.
+
+    for(int y = 0; y < wall.bot; y++)
+        put(display, x, y, color(tile(lerp(trace, -pcast(wall.size, gpu.yres, y)), map.floring)));
+
+The same is done for the ceiling. Notice the positive before the pcast() call.
+
+    for(int y = wall.top; y < gpu.yres; y++)
+        put(display, x, y, color(tile(lerp(trace, +pcast(wall.size, gpu.yres, y)), map.ceiling)));
 
 ![](/images/lw/11.PNG)
 
+Not too shabby.
