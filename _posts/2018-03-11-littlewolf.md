@@ -54,7 +54,8 @@ This is calculated by subtracting the horizontal vector from the vertical vector
     mag(sub(hor, ver)) < 1e-3f ? dc
 
 The height of the wall is calculated by taking the normal ray to the wall (in this case, the x direction), and multiplying the
-focal length of the field of view (0.8 from before in the first image).
+focal length of the field of view (0.8 from before in the first image). The normal is clamped to a small value incase the player
+gets too close to the screen else the size will grow infinitly with close to zero division.
 
     const float normal = ray.x < 1e-2f ? 1e-2f : ray.x;
     const float size = 0.5f * focal * xres / normal;
@@ -65,13 +66,37 @@ The top and bottom of the wall can be found by subtracting half the size of the 
     const int bot = (yres - size) / 2.0f;
 
 Knowing the wall height for each vertical column of the screen, rasterization may now be done. The resulting image is a little boring, but ceiling
-and floor casting will sprucen up the image:
+and floor casting will sprucen things up:
 
 ![](/images/lw/9.PNG)
 
-Ceiling and floor casting...
+Ceiling and floor casting require a percentage of the floor in relation to the wall height. Dividing the wall in two, an expression for y can be
+found for everything below the middle of the wall:
 
 ![](/images/lw/12.PNG)
+
+Given that:
+
+    y = yres / 2 - h / 2
+
+Where h here is the size of the wall calculated earlier, a percentage for y can be found with a little reordering.
+
+    y - yres / 2 = -h / 2
+
+    1.0 = -(h / 2) / (y - yres / 2)
+
+With a little cleaning:
+
+    1.0 = -h / (2 * y - yres)
+
+This yields:
+
+    const float percentage = -size / (2 * (y + 1) - yres);
+
+Where 1 was added to y account for any floating point error for the flooring and ceiling you'd see with longer distances.
+Size is merely h here.
+
+Multiplying this percentage by -1 will yield the equation for ceiling casting.
 
 ![](/images/lw/11.PNG)
 
