@@ -14,13 +14,13 @@ From the player's position, a ray is cast within in the player's field of view (
 
 ![](/images/lw/1.PNG)
 
-The distance between each ray in relation to the field of view must be equal. This is easily accomplished by linear
+The distance between each ray in relation to the field of view must be equal. This is accomplished by linear
 interpolating the field of view with an x percentage of the x-resolution.
 
     const Point direction = lerp(camera, x / (float) gpu.xres);
 
 This yeilds one directional vector for each column the screen. Assuming the screen resolution is 700 pixels wide,
-distances d0 - d699 (inclusive) in the image above.
+distances d0 - d699 (inclusive) are generaed as seen in the image above.
 
 A ray jumps both a vertical square and a horizontal square. The shortest distance of the two is the correct jump of the ray.
 Seen below, B is a horizontal jump at (0.8, 1.0) and B1 is a vertical jump at (1.0, 1.23). B is closest and is chosen
@@ -37,7 +37,7 @@ Due the nature of casting floating point numbers to integers, a wall may be miss
 Probes are small vector extensions of the ray, extending either vertically, horizontally, or diagonally
 depending on the wall hit location.
 
-If a vertical wall is hit, a horizontal probe is used to get the wall color index. Likewise, horizontal wall hits use a vertical probe.
+If a vertical wall is hit, a horizontal probe (dx) is used to get the wall color index. Likewise, horizontal wall hits use a vertical probe (dy).
 
 ![](/images/lw/4.PNG)
 
@@ -45,7 +45,7 @@ This is accomplished by checking the floating point decimal value for zero.
 
     dec(ray.x) == 0.0f ? dx : dy
 
-Wall hits between two walls uses a diagonal probe, else there will be contention between the color indices.
+Wall hits between two walls uses a diagonal probe (dc), else there will be contention between the color indices.
 
 ![](/images/lw/5.PNG)
 
@@ -55,12 +55,16 @@ This is calculated by subtracting the horizontal vector from the vertical vector
 
 The height of the wall is calculated by taking the normal ray to the wall (in this case, the x direction), and multiplying the
 focal length of the field of view (0.8 from before in the first image). The normal is clamped to a small value incase the player
-gets too close to the screen else the size will grow infinitly with close to zero division.
+gets too close to the screen.
 
     const float normal = ray.x < 1e-2f ? 1e-2f : ray.x;
     const float size = 0.5f * focal * xres / normal;
 
-Notice, however, that this only works when the theta of the camera is set to zero. Given the camera is rotated,
+The ray is defined as the difference of the wall hit and the player:
+
+    const Ray ray = sub(wall.hit.where, hero.where);
+
+This only works when the theta of the camera is set to zero. Given the camera is rotated,
 the ray index hit is to be sampled and the resulting ray is to be corrected back to the fov line else ray.x will yield
 a warped fish eye effect when turning. Correcting the above:
 
@@ -73,28 +77,24 @@ The top and bottom of the wall can be found by subtracting half the size of the 
     const int top = (yres + size) / 2.0f;
     const int bot = (yres - size) / 2.0f;
 
-Knowing the wall height for each vertical column of the screen, rasterization may now be done.
+Rasterization is done knowing the wall height for each vertical column of the screen.
 
 ![](/images/lw/9.PNG)
 
-Boring, yes. Ceiling and flooring casting will add a bit of flavour.
-
-Such techniques require a percentage of the floor in relation to the wall height. Dividing the wall in two, an expression for y can be
+Ceiling and floor casting require a percentage of the floor in relation to the wall height. By dividing the wall in two an expression for y can be
 found for everything below the middle of the wall:
 
 ![](/images/lw/12.PNG)
 
-Given that:
+Here and expression for y is formed:
 
     y = yres / 2 - h / 2
 
-Where h here is the size of the wall calculated earlier, a percentage for y can be found with a little reordering.
+Where h is the size of the wall calculated earlier. With a bit of reordering a percentage expression for y is found.
 
     y - yres / 2 = -h / 2
 
     1.0 = -(h / 2) / (y - yres / 2)
-
-With a little cleaning:
 
     1.0 = -h / (2 * y - yres)
 
@@ -102,25 +102,36 @@ This yields:
 
     const float percentage = -size / (2 * (y + 1) - yres);
 
-Where one was added to y account for any floating point error for the flooring and ceiling you'd see with longer distances; h was renamed to size here too.
+Where one was added to y account for any floating point error for the flooring and ceiling you'd see with longer distances.
+Multiplying this percentage by negative one will yield the equation for ceiling casting.
 
-Multiplying this percentage by negative one will yield the equation for ceiling casting. The above equation can be wrapped into a function called
-pcast(). By dropping the negative from the call, the call can be dual purposed for ceiling and floor casting by simply prefixing the call with a negative.
+The above equation can be wrapped into a function called pcast():
+
+    static float pcast(const float size, const int yres, const int y)
+    {
+        return size / (2 * (y + 1) - yres);
+    }
+
+By dropping the negative from the call, the call can be dual purposed for ceiling and floor casting by simply prefixing the call with a negative.
 
 The trace line between the two points from the hero location (origin here) and the wall hit is delcared as:
 
     const Line trace = { hero.where, hit.where };
 
-And the trace is lerped with the percentage from the pcast equation. The tile index of the ceiling and flooring tiles is sampled
+The trace is lerped with the percentage from the pcast equation. The tile index of the ceiling and flooring tiles is sampled
 and the pixel is put() to the screen.
 
     for(int y = 0; y < wall.bot; y++)
-        put(display, x, y, color(tile(lerp(trace, -pcast(wall.size, gpu.yres, y)), map.floring)));
+        put(display, x, y,
+            color(tile(
+                lerp(trace, -pcast(wall.size, gpu.yres, y)), map.floring)));
 
 The same is done for the ceiling. Notice the positive before the pcast() call.
 
     for(int y = wall.top; y < gpu.yres; y++)
-        put(display, x, y, color(tile(lerp(trace, +pcast(wall.size, gpu.yres, y)), map.ceiling)));
+        put(display, x, y,
+            color(tile(
+                lerp(trace, +pcast(wall.size, gpu.yres, y)), map.ceiling)));
 
 ![](/images/lw/11.PNG)
 
