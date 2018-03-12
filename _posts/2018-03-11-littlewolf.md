@@ -14,7 +14,7 @@ From the player's position, a ray is cast within in the player's field of view (
 
 ![](/images/lw/1.PNG)
 
-The distance between each ray in relation to the field of view must be equal. This is accomplished by linear
+The distance between each ray in relation to the field of view is equal. This is accomplished by linear
 interpolating the field of view with an x percentage of the x-resolution.
 
     const Point direction = lerp(camera, x / (float) gpu.xres);
