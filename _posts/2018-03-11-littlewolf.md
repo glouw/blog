@@ -33,7 +33,7 @@ Assume the red wall stretches on indefinitely.
 
 ![](/images/lw/3.PNG)
 
-Due the nature of casting floating point numbers to integers, a wall may be missed if not probed.
+Due the nature of typecasting floating point numbers to integers, a wall may be missed if not probed.
 Probes are small vector extensions of the ray, extending either vertically, horizontally, or diagonally
 depending on the wall hit location.
 
