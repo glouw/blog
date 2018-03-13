@@ -4,8 +4,6 @@ layout: post
 
 [GitHub Source](https://github.com/glouw/littlewolf)
 
-[Download Littlewolf-1.0.zip (Windows 32/64 bit)](https://github.com/glouw/littlewolf/releases/download/littlewolf-1.0/littlewolf-1.0.zip)
-
 Littlewolf recently gained a bit of popularity on HackerNews so a blog post was due.
 Littlewolf is a Wolfenstein a software graphics engine written to be as minimal as possible. It strives to emulate
 Wolfenstein and Doom with a technique known as raycasting.
@@ -132,4 +130,4 @@ The same is done for the ceiling. Notice the positive before the pcast() call.
 
 ![](/images/lw/11.PNG)
 
-Not too shabby.
+Not too shabby. [Give the source a read.](https://github.com/glouw/littlewolf)
