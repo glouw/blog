@@ -10,6 +10,8 @@ Littlewolf recently gained a bit of popularity on HackerNews so a blog post was 
 Littlewolf is a Wolfenstein a software graphics engine written to be as minimal as possible. It strives to emulate
 Wolfenstein and Doom with a technique known as raycasting.
 
+# Ray Casting
+
 From the player's position, a ray is cast within in the player's field of view (fov) for each vertical pixel column of the screen.
 
 ![](/images/lw/1.PNG)
@@ -41,17 +43,16 @@ If a vertical wall is hit, a horizontal probe (dx) is used to get the wall color
 
 ![](/images/lw/4.PNG)
 
-This is accomplished by checking the floating point decimal value for zero.
-
-    Point probe = dec(ray.x) == 0.0f ? dx : dy;
-
-Wall hits between two walls uses a diagonal probe (dc), else there will be contention between the color indices.
+This is accomplished by checking the floating point decimal value for zero. Wall hits between two walls uses a diagonal probe (dc), else there will be contention between the color indices.
 
 ![](/images/lw/5.PNG)
 
-This is calculated by subtracting the horizontal vector from the vertical vector. If the resulting vector magnitude is small, the ray is diagonal:
+This is calculated by subtracting the horizontal vector from the vertical vector. If the resulting vector magnitude is small, the ray is diagonal,
+ultimately yielding the expression for three probe cases as:
 
-    probe = mag(sub(hor, ver)) < 1e-3f ? dc : probe;
+    const Point probe = mag(sub(hor, ver)) < 1e-3f ? dc dec(ray.x) == 0.0f ? dx : dy;
+
+# Wall Height
 
 The height of the wall is calculated by taking the normal ray to the wall (in this case, the x direction), and multiplying the
 focal length of the field of view (0.8 from before in the first image). The normal is clamped to a small value in case the player
@@ -79,6 +80,8 @@ The top and bottom of the wall can be found by subtracting half the size of the 
 Rasterization is done:
 
 ![](/images/lw/9.PNG)
+
+# Ceiling and Floor casting
 
 Ceiling and floor casting require a percentage of the floor in relation to the wall height. By dividing the wall in two an expression for y can be
 found for everything below the middle of the wall:
