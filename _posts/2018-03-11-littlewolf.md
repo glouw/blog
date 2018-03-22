@@ -4,11 +4,11 @@ layout: post
 
 [GitHub Source](https://github.com/glouw/littlewolf)
 
+![](/images/lw/peekgif.gif)
+
 Littlewolf recently gained a bit of popularity on HackerNews so a blog post was due.
 Littlewolf is a Wolfenstein a software graphics engine written to be as minimal as possible. It strives to emulate
 Wolfenstein and Doom with a technique known as raycasting.
-
-![](/images/lw/peekgif.gif)
 
 # Ray Casting
 
