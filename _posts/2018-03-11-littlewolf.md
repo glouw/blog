@@ -52,4 +52,6 @@ As both (h) and (y) are constant, (y) will vary and change the percentage (p). T
 
 ![](/images/lw/11.PNG)
 
-[The full source is here. pcast() handles the floor and ceiling casting.](https://github.com/glouw/littlewolf)
+[The full source is here.](https://github.com/glouw/littlewolf)
+
+The function pcast() handles the floor and ceiling casting.
