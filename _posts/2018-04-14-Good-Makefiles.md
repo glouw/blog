@@ -22,16 +22,11 @@ and like Latin, a good template is all one needs:
         $(CC) $(CFLAGS) -MMD -MP -MT $@ -MF $*.td -c $<
         mv -f $*.td $*.d
 
-    %.d: ;
-    -include *.d
+# So whats going on here?
 
-    clean:
-        rm -f $(BIN) $(SRCS:.c=.o) $(SRCS:.c=.d)
-
-# Whats going on here?
-
-While compiling, file header dependencies are stored in dependency files. If any header is updated, all source files which
-included the header are recompiled and relinked into the final binary.
+While compiling, file header dependencies are stored in dependency files. If a source file is updated
+it is solely recompiled and relinked. If any header is updated, all source files which included the
+header are recompiled and relinked.
 
 # So what do I do?
 
