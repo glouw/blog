@@ -3,7 +3,7 @@ layout: post
 ---
 
 Makefiles are like Latin. Only scholars can speak Latin. Thankfully patterns exist in Makefiles,
-an like Latin, a good template is all one needs:
+and like Latin, a good template is all one needs:
 
     CC = gcc
 
