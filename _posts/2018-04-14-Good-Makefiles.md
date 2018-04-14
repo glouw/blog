@@ -22,6 +22,12 @@ and like Latin, a good template is all one needs:
         $(CC) $(CFLAGS) -MMD -MP -MT $@ -MF $*.td -c $<
         mv -f $*.td $*.d
 
+    %.d: ;
+    -include *.d
+
+    clean:
+        rm -f $(BIN) $(SRCS:.c=.o) $(SRCS:.c=.d)
+
 # So whats going on here?
 
 While compiling, file header dependencies are stored in dependency files. If a source file is updated
