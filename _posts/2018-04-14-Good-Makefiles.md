@@ -32,7 +32,7 @@ and like Latin, a good template is all one needs:
 
 While compiling, file header dependencies are stored in dependency files. If a source file is updated
 it is solely recompiled and relinked. If any header is updated, all source files which included the
-header are recompiled and relinked. If the Makefile is updated everything is recompiled.
+header are recompiled and relinked. If the Makefile is updated everything is recompiled and relinked.
 
 # So what do I do?
 
