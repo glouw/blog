@@ -2,31 +2,32 @@
 layout: post
 ---
 
-Makefiles are like Latin. Only scholars can speak Latin. Thankfully patterns exist in Makefiles,
-and like Latin, a good template is all one needs:
-
-    CC = gcc
+GNU Makefiles are like Latin. Only scholars can speak Latin.
+Thankfully patterns exist in GNU Makefiles, and like Latin, a good template is all one needs:
 
     BIN = a.out
 
     SRCS = main.c foo.c bar.c
+    OBJS = $(SRCS:.c=.o)
+    DEPS = $(SRCS:.c=.d)
 
-    CFLAGS = -Wshadow -Wall -Wpedantic -Wextra -Wdouble-promotion -g
+    CFLAGS = -Wshadow -Wall -Wpedantic -Wextra -g
 
     LDFLAGS = -lm
 
-    $(BIN): $(SRCS:.c=.o)
-        $(CC) $(CFLAGS) $(SRCS:.c=.o) $(LDFLAGS) -o $(BIN)
+    $(BIN): $(OBJS)
+        gcc $(CFLAGS) $(OBJS) $(LDFLAGS) -o $(BIN)
 
     %.o : %.c Makefile
-        $(CC) $(CFLAGS) -MMD -MP -MT $@ -MF $*.td -c $<
+        gcc $(CFLAGS) -MMD -MP -MT $@ -MF $*.td -c $<
         mv -f $*.td $*.d
 
     %.d: ;
     -include *.d
 
     clean:
-        rm -f $(BIN) $(SRCS:.c=.o) $(SRCS:.c=.d)
+        rm -f $(BIN) $(OBJS) $(DEPS)
+
 
 # So whats going on here?
 
@@ -36,8 +37,4 @@ header are recompiled and relinked. If the Makefile is updated everything is rec
 
 # So what do I do?
 
-Simply add your new source files to SRCS and add libraries to LDFLAGS.
-
-# Is it C++ compatible?
-
-Yes, change CC to g++, and replace all occurrences of SRCS:.c=.d with SRCS:.cpp=.d.
+Simply add your new source files to SRCS, libraries to LDFLAGS, and more compiler flags like -O3 and -flto to CFLAGS.
