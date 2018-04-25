@@ -5,8 +5,8 @@ layout: home
 ---
 
 I am an experienced programmer who steers towards low level programming
-concepts such as graphics engines, virtual machines, compilers,
-machine learning, image processing, and video game development.
+concepts such as neural networks, graphics engines, virtual machines,
+compilers, machine learning, image processing, and video game development.
 
 Below is an archive of my writings.
 
