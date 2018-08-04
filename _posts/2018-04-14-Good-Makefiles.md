@@ -2,8 +2,7 @@
 layout: post
 ---
 
-GNU Makefiles for C are like Latin. Only scholars can speak Latin.
-Thankfully patterns exist in GNU Makefiles, and like Latin, a good template is all one needs:
+GNU Makefiles and C. One just needs a good template:
 
     BIN = a.out
 
