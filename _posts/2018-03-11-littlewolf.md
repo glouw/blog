@@ -4,11 +4,9 @@ layout: post
 
 [GitHub Source](https://github.com/glouw/littlewolf)
 
-Littlewolf recently gained a bit of popularity on HackerNews so a blog post was due.
+Raycasting howto blogs are a dime a dozen, though little about ceiling or floor casting is ever mentioned.
 
 ![](/images/lw/peekgif.gif)
-
-Raycasting howto blogs are a dime a dozen, though little about ceiling or floor casting is ever mentioned.
 
 # Wall Height
 

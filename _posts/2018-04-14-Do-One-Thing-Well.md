@@ -4,7 +4,7 @@ layout: post
 
 Functions in C excel when transforming or creating one piece of data.
 
-Have a look at typical Real Time Strategy game unit structure:
+Have a look at a struct for a unit in a typical RTS game:
 
     typedef struct
     {
