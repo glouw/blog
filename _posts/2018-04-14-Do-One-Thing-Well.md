@@ -43,7 +43,7 @@ Any number of arguments thereafter will remain const:
 
 Type objects like map, building, and weather, are not passed as const pointers
 since the const can easily be dropped and their state modified. Sure, these types can
-hold pointers within which can modify they data the point to even when the type is const,
+hold pointers within which can modify the data they point to even when the type is const,
 but the onus on doing one thing well remains - only the unit type will be modified.
 
 Have many inputs, but transform one piece of data. Make your functions do one thing well.
