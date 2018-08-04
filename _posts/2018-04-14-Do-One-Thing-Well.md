@@ -16,7 +16,7 @@ Have a look at typical Real Time Strategy game unit structure:
 
 Constructing a new unit implies creating a stack unit.
 
-    void xunew()
+    Unit xunew()
     {
         Unit u;
         u.attack = 7;
