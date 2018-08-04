@@ -45,7 +45,7 @@ Where h is the size of the wall calculated earlier. With a bit of reordering a p
 
     p = -h / (2 * y - yres)
 
-As both (h) and (y) are constant, (y) will vary and change the percentage (p). This percentage is then used to lerp the along the casted ray:
+As both (h) and (yres) are constant, (y) will vary and change the percentage (p). This percentage is then used to lerp the along the casted ray:
 
 ![](/images/lw/11.PNG)
 
