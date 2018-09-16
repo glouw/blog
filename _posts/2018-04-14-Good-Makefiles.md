@@ -10,7 +10,7 @@ GNU Makefiles and C. One just needs a good template:
     OBJS = $(SRCS:.c=.o)
     DEPS = $(SRCS:.c=.d)
 
-    CFLAGS = -Wshadow -Wall -pedantic -Wextra -g
+    CFLAGS = --std=c99 -Wshadow -Wall -pedantic -Wextra -g
 
     LDFLAGS = -lm
 
