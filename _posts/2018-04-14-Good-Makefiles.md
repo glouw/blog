@@ -21,15 +21,15 @@ GNU Makefiles and C. One just needs a good template:
     #
 
     $(BIN): $(OBJS)
-        $(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) -o $(BIN)
+    	$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) -o $(BIN)
 
     #
     # Compiler.
     #
 
     %.o : %.c Makefile
-        $(CC) $(CFLAGS) -MMD -MP -MT $@ -MF $*.td -c $<
-        mv -f $*.td $*.d
+    	$(CC) $(CFLAGS) -MMD -MP -MT $@ -MF $*.td -c $<
+    	mv -f $*.td $*.d
 
     #
     # Dependency Generator.
@@ -38,7 +38,7 @@ GNU Makefiles and C. One just needs a good template:
     -include *.d
 
     clean:
-        rm -f $(BIN) $(OBJS) $(DEPS)
+    	rm -f $(BIN) $(OBJS) $(DEPS)
 
 
 # So whats going on here?
@@ -66,11 +66,6 @@ Why are CFLAGS passed to the linker?
 Can I use this with C++?
 
     -> Yes, change CC = gcc to CPP = g++, CFLAGS to CPPFLAGS, and -std = c99 to -std = c++14.
-
-The Makefile is broken (eg. tabs are spaces).
-
-    -> My editor retabs tabs to 4 spaces.
-       I could not figure out how to mix tabs and spaces for this blog post.
 
 Can you go into further detail on the gcc dependency flags (-MMD, -MP, and friends)?
 
