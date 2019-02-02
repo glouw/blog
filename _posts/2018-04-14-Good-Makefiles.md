@@ -37,6 +37,7 @@ GNU Makefiles and C. One just needs a good template:
 
     -include *.d
 
+    .PHONY: clean
     clean:
     	rm -f $(BIN) $(OBJS) $(DEPS)
 
