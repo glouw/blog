@@ -52,23 +52,9 @@ header are recompiled and relinked. If the Makefile is updated everything is rec
 
 Simply add your new source files to SRCS, libraries to LDFLAGS, and more compiler flags to CFLAGS.
 
-# FAQ
+By the way, check out the Makefile for Andvaranaut:
 
-Why are dependencies first created at .td and then moved to .d?
+    https://github.com/glouw/andvaranaut/blob/master/src/Makefile
 
-    -> In the off chance the build is stopped mid depdedency generation,
-       the .td file will be scrapped and the .d file regenerated.
-
-Why are CFLAGS passed to the linker?
-
-    -> The linker requires the link time flag and optimizer flag.
-       Instead of creating an extra variable, CFLAGS is reused.
-
-Can I use this with C++?
-
-    -> Yes, change CC = gcc to CPP = g++, CFLAGS to CPPFLAGS, and -std = c99 to -std = c++14.
-
-Can you go into further detail on the gcc dependency flags (-MMD, -MP, and friends)?
-
-    -> This post goes into pretty good detail on it all:
-       http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/#tldr
+It uses this Makefile template, and is able to compile Andvaranaut using either C or C++ compilers
+for both gcc and clang.
