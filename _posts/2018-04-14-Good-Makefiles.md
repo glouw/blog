@@ -10,18 +10,31 @@ GNU Makefiles and C. One just needs a good template:
     OBJS = $(SRCS:.c=.o)
     DEPS = $(SRCS:.c=.d)
 
-    CFLAGS = --std=c99 -Wshadow -Wall -pedantic -Wextra -g
+    CC = gcc
+
+    CFLAGS = -std=c99 -Wshadow -Wall -pedantic -Wextra -g -O3 -flto -march=native
 
     LDFLAGS = -lm
 
+    #
+    # Linker.
+    #
+
     $(BIN): $(OBJS)
-        gcc $(CFLAGS) $(OBJS) $(LDFLAGS) -o $(BIN)
+        $(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) -o $(BIN)
+
+    #
+    # Compiler.
+    #
 
     %.o : %.c Makefile
-        gcc $(CFLAGS) -MMD -MP -MT $@ -MF $*.td -c $<
+        $(CC) $(CFLAGS) -MMD -MP -MT $@ -MF $*.td -c $<
         mv -f $*.td $*.d
 
-    %.d: ;
+    #
+    # Dependency Generator.
+    #
+
     -include *.d
 
     clean:
@@ -36,4 +49,30 @@ header are recompiled and relinked. If the Makefile is updated everything is rec
 
 # So what do I do?
 
-Simply add your new source files to SRCS, libraries to LDFLAGS, and more compiler flags like -O3 and -flto to CFLAGS.
+Simply add your new source files to SRCS, libraries to LDFLAGS, and more compiler flags to CFLAGS.
+
+# FAQ
+
+Why are dependencies first created at .td and then moved to .d?
+
+    -> In the off chance the build is stopped mid depdedency generation,
+       the .td file will be scrapped and the .d file regenerated.
+
+Why are CFLAGS passed to the linker?
+
+    -> The linker requires the link time flag and optimizer flag.
+       Instead of creating an extra variable, CFLAGS is reused.
+
+Can I use this with C++?
+
+    -> Yes, change CC = gcc to CPP = g++, CFLAGS to CPPFLAGS, and -std = c99 to -std = c++14.
+
+The Makefile is broken (eg. tabs are spaces).
+
+    -> My editor retabs tabs to 4 spaces.
+       I could not figure out how to mix tabs and spaces for this blog post.
+
+Can you go into further detail on the gcc dependency flags (-MMD, -MP, and friends)?
+
+    -> This post goes into pretty good detail on it all:
+       http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/#tldr
