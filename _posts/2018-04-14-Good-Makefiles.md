@@ -52,9 +52,7 @@ header are recompiled and relinked. If the Makefile is updated everything is rec
 
 Simply add your new source files to SRCS, libraries to LDFLAGS, and more compiler flags to CFLAGS.
 
-By the way, check out the Makefile for Andvaranaut:
-
-    https://github.com/glouw/andvaranaut/blob/master/src/Makefile
+By the way, check out the [Makefile for Andvaranaut.](https://github.com/glouw/andvaranaut/blob/master/src/Makefile)
 
 It uses this Makefile template, and is able to compile Andvaranaut using either C or C++ compilers
 for both gcc and clang.
