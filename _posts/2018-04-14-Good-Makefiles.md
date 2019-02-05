@@ -19,7 +19,7 @@ GNU Makefiles and C. One just needs a good template:
     LDFLAGS =
 
     $(BIN): $(OBJS)
-    	$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) $(LDLIBS) -o $(BIN)
+    	$(CC) $(OBJS) $(LDFLAGS) $(LDLIBS) -o $(BIN)
 
     %.o : %.c Makefile
     	$(CC) $(CFLAGS) -MMD -MP -MT $@ -MF $*.td -c $<
@@ -40,7 +40,7 @@ header are recompiled and relinked. If the Makefile is updated everything is rec
 
 # So what do I do?
 
-Simply add your new source files to SRCS, libraries to LDLIBS, and more compiler flags to CFLAGS.
+Simply add your new source files to SRCS, libraries to LDLIBS, more compiler flags to CFLAGS, and linker flags to LDFLAGS.
 
 By the way, check out the [Makefile for Andvaranaut.](https://github.com/glouw/andvaranaut/blob/master/src/Makefile)
 
