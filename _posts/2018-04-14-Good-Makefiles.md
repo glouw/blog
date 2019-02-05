@@ -53,5 +53,5 @@ Yes, change CC to CXX, gcc to g++, CFLAGS to CXXFLAGS, and all .c files to .cpp 
 
 Check out the [Makefile for Andvaranaut.](https://github.com/glouw/andvaranaut/blob/master/src/Makefile)
 
-It uses this Makefile template, but written in the intersection of c99 and c++98, making it compilable with
+It uses this Makefile template, but the C source is written in the intersection of c99 and c++98, making it compilable with
 C and C++ compilers using both gcc and clang (and as such, CC and CXX are removed en lieu of the COMPILER variable).
