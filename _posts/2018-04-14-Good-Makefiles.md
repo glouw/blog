@@ -19,7 +19,7 @@ GNU Makefiles and C. One just needs a good template:
     LDFLAGS =
 
     $(BIN): $(OBJS)
-    	$(CC) $(CFLAGS) $(OBJS) $(LDLIBS) $(LDFLAGS) -o $(BIN)
+    	$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) $(LDLIBS) -o $(BIN)
 
     %.o : %.c Makefile
     	$(CC) $(CFLAGS) -MMD -MP -MT $@ -MF $*.td -c $<
