@@ -37,8 +37,8 @@ GNU Makefiles and C. One just needs a good template:
 # So whats going on here?
 
 Dependency files are generated during compilation. If a source file is updated it is solely recompiled and linked.
-If any header is updated, the dependency file is referenced and all source files which included the header are recompiled
-and then linked. If a dependency file is accidentally deleted, it is regenerated. If the Makefile is updated all source
+If any header is updated then the dependency file is referenced and all source files which included the header are recompiled
+and then linked. If a dependency file is accidentally deleted then it is regenerated. If the Makefile is updated then all source
 files are recompiled and linked.
 
 # So what do I do?
