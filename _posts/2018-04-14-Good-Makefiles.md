@@ -45,7 +45,13 @@ files are recompiled and linked.
 
 Simply add your new source files to SRCS, compiler flags to CFLAGS, libraries to LDLIBS, and linker flags to LDFLAGS.
 
-For a real example, check out the [Makefile for Andvaranaut.](https://github.com/glouw/andvaranaut/blob/master/src/Makefile)
+# Can I use this with C++?
+
+Yes, change CC to CXX, gcc to g++, CFLAGS to CXXFLAGS, and all .c files to .cpp files.
+
+# A real example
+
+Check out the [Makefile for Andvaranaut.](https://github.com/glouw/andvaranaut/blob/master/src/Makefile)
 
 It uses this Makefile template, but written in the intersection of c99 and c++98, making it compilable with
-C and C++ compilers for both gcc and clang.
+C and C++ compilers using both gcc and clang.
