@@ -15,8 +15,8 @@ To name, the three most important DRS files are:
     interfac.drs
     terrain.drs
 
-Of these, graphics.drs contains all unit and building sprites, interfac.drs contains static GUI bitmaps and color palettes,
-and terrain.drs contains all isometric terrain tiles.
+Of these, `graphics.drs` contains all unit and building sprites, `interfac.drs` contains static GUI bitmaps and color palettes,
+and `terrain.drs` contains all isometric terrain tiles.
 
 ## Loading a DRS Database.
 
@@ -198,6 +198,7 @@ The color palette is standard RGB, and is packed as PAL-JASC:
     Palette;
 
 https://github.com/glouw/aoklite/blob/master/src/Palette.c
+
 Unpacking is a string of `fscanf` calls:
 
     fscanf(fp, "%15s\n", palette.label);
@@ -213,7 +214,6 @@ Unpacking is a string of `fscanf` calls:
         palette.color[i] = (r << 16) | (g << 8) | b;
     }
 
-With a bit of SDL2 fundamentals, the RGB values are transferred to a
-surface, and then to a texture.
+With a bit of SDL2 fundamentals, the RGB values are transferred to a surface, and then to a texture.
 
 ![](/images/aoklite/Peek-2019-04-06-06-59.gif)
