@@ -80,7 +80,7 @@ The `data_offset`, in bytes, determines where within the `DRS` database a file f
 
 Both terrain and unit sprite / building animations are stored as `SLP` files within terrain.drs and graphics.drs, respectively.
 
-Static GUI bitmaps are also stored in `SLP` files, but within interfac.drs.
+Static GUI bitmaps are also stored in `SLP` files, but within `interfac.drs`.
 
 Nevertheless, given both a table index and file index, either an `SLP`, `wav`, or `binary` file may be loaded from disk.
 
