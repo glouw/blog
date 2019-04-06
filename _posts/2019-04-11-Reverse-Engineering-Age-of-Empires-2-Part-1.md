@@ -4,12 +4,12 @@ layout: post
 
 # Data
 
-Data, be it sprite bitmap animations, wav files, or static GUI bitmaps, are stored in binary DRS databases. Once
-the Age of Kings Trial has been installed (under wine, for instance), these DRS databases can be found at:
+Data, be it sprite bitmap animations, wav files, or static GUI bitmaps, are stored in binary `DRS` databases. Once
+the Age of Kings Trial has been installed (under wine, for instance), these `DRS` databases can be found at:
 
     /home/gl/.wine/drive_c/Program Files (x86)/Microsoft Games/Age of Empires II Trial/Data/
 
-To name, the three most important DRS files are:
+To name, the three most important `DRS` files are:
 
     graphics.drs
     interfac.drs
@@ -22,7 +22,7 @@ and `terrain.drs` contains all isometric terrain tiles.
 
 `https://github.com/glouw/aoklite/blob/master/src/Drs.c`
 
-A DRS database is essentially modelled as
+A `DRS` database is essentially modelled as
 
     typedef struct
     {
@@ -46,7 +46,7 @@ populating the struct like:
     fread(&drs.table_count, sizeof(drs.table_count), 1, drs.fp);
     fread(&drs.file_offset, sizeof(drs.file_offset), 1, drs.fp);
 
-A DRS database contains tables. Allocating space for the table is determined by the `table_count` read from the disk:
+A `DRS` database contains tables. Allocating space for the table is determined by the `table_count` read from the disk:
 
     drs.table = (Table*) calloc(drs.table_count, sizeof(*drs.table));
 
@@ -74,7 +74,7 @@ A table contains a number of files, and their structs, once space is allocated, 
     }
     File
 
-The `data_offset`, in bytes, determines where within the DRS database a file format of `slp`, `wav`, or `binary` is placed.
+The `data_offset`, in bytes, determines where within the `DRS` database a file format of `slp`, `wav`, or `binary` is placed.
 
 `slp` files contain visual animations. `wav` files contain sounds and music. `binary` files contain scripts, or color palettes.
 
