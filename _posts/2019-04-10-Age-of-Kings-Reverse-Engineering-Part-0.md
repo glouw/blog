@@ -19,7 +19,7 @@ As for the reverse engineering, Ensemble opted to store all artistic assets into
 A DRS database contains sprite bitmaps, sound wav files, and static GUI bitmaps.
 
 The engine loads the binary DRS database into RAM, and at runtime utilizes the CPU to swap out sprite palette colors.
-This gives the effect of 8 player color for the sprites, sprite outlines of differing color when unit a sprite is behind
+This gives the effect of 8 player color for the sprites, sprite outlines of differing color when a unit sprite is behind
 a building sprite, and checkered effects when building sprites are placed on water.
 
 Unit movement and combat is grid based with a modified version of the a-star pathfinder, while as the renderer
@@ -36,6 +36,8 @@ Source code will not ship with the game binary DRS database.
 You will need to install the Age of Empires 2 - The Age of Kings Demo. The installation also works in wine if you are in Linux.
 
 Reverse engineering documentation will be referenced from OpenAge's efforts to fully reverse engineer the Age of Empires II and all its expansions.
-I suggest you check them out.
+I suggest you check them out:
+
+`019/04/11/Age-of-Kings-Reverse-Engineering-Part-0.html`
 
 Without further adieu, let's get started.
