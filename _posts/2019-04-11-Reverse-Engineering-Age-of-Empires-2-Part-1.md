@@ -74,21 +74,21 @@ A table contains a number of files, and their structs, once space is allocated, 
     }
     File
 
-The `data_offset`, in bytes, determines where within the DRS database a file format of SLP, WAV, or BINARY is placed.
+The `data_offset`, in bytes, determines where within the DRS database a file format of `slp`, `wav`, or `binary` is placed.
 
-SLP files contain visual animations. WAV files contains sounds and music. BINARY files contains scripts, or color palettes.
+`slp` files contain visual animations. `wav` files contain sounds and music. `binary` files contain scripts, or color palettes.
 
-Both terrain and unit sprite / building animations are stored as SLP files within terrain.drs and graphics.drs, respectively.
+Both terrain and unit sprite / building animations are stored as `slp` files within terrain.drs and graphics.drs, respectively.
 
-Static GUI bitmaps are also stored in SLP files, but within interfac.drs.
+Static GUI bitmaps are also stored in `slp` files, but within interfac.drs.
 
-Nevertheless, given both a table index and file index, either an SLP, WAV, or BINARY file may be loaded from disk.
+Nevertheless, given both a table index and file index, either an `slp`, `wav`, or `binary` file may be loaded from disk.
 
-## Loading an SLP File.
+## Loading an `slp` File.
 
 `https://github.com/glouw/aoklite/blob/master/src/Slp.c`
 
-SLP files are modelled as:
+`slp` files are modelled as:
 
     typedef struct
     {
@@ -185,7 +185,7 @@ This requires a tiny virtual machine to unpack the image data.
     }
 
 Once the color palette values are unpacked, the `palette_offset` from Frame dictates which
-palette to load from `interfac.drs`, BINARY table `0`, file `45 + palette_offset`.
+palette to load from `interfac.drs`, `binary` table `0`, file `45 + palette_offset`.
 The color palette is standard RGB, and is packed as PAL-JASC:
 
     typedef struct
