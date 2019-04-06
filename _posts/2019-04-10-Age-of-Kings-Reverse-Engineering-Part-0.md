@@ -4,11 +4,10 @@ layout: post
 
 This series will be dedicated to reverse engineering Age of Empires II - The Age of Kings.
 
-Part 0: Introduction and tooling.
-Part 1: Data loading and unpacking
-Part 2: Terrain placement and tilemap editing.
-
-Part X: ... (TBD)
+    Part 0: Introduction and tooling
+    Part 1: Data loading and unpacking
+    Part 2: Terrain placement and tilemap editing
+    Part X: ... (TBD)
 
 ## Introduction
 
