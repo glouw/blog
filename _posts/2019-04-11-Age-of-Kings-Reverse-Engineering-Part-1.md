@@ -215,3 +215,5 @@ Unpacking is a string of `fscanf` calls:
 
 With a bit of SDL2 fundamentals, the RGB values are transferred to a
 surface, and then to a texture.
+
+![](/images/aoklite/Peek-2019-04-06-06-59.gif)
