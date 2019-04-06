@@ -62,7 +62,7 @@ Tables immediately follow on-disk, and are modelled as:
     Table;
 
 Once again, the true size of the string is twice the size of the size on disk to allow for null byte padding. Struct contents
-are similarly populated by contiguous calls to fread.
+are similarly populated by contiguous calls to `fread`.
 
 A table contains a number of files, and their structs, once space is allocated, models as:
 
