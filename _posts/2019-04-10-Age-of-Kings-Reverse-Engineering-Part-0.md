@@ -2,8 +2,6 @@
 layout: post
 ---
 
-# Reverse Engineering the Age of Kings - Part 0
-
 This series will be dedicated to reverse engineering Age of Empires II - The Age of Kings.
 
     Part 0: Introduction and Tooling.
@@ -42,3 +40,5 @@ You will need to install the Age of Empires 2 - The Age of Kings Demo. The insta
 
 Reverse engineering documentation will be referenced from OpenAge's efforts to fully reverse engineer the Age of Empires II and all its expansions.
 I suggest you check them out.
+
+Without further adieu, let's get started.
