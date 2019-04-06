@@ -38,6 +38,6 @@ You will need to install the Age of Empires 2 - The Age of Kings Demo. The insta
 Reverse engineering documentation will be referenced from OpenAge's efforts to fully reverse engineer the Age of Empires II and all its expansions.
 I suggest you check them out:
 
-`019/04/11/Age-of-Kings-Reverse-Engineering-Part-0.html`
+`https://github.com/SFTtech/openage/tree/master/doc`
 
 Without further adieu, let's get started.
