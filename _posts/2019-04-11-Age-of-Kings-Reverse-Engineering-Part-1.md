@@ -152,7 +152,7 @@ terminated with `0xFF`.
 
 This requires a tiny virtual machine to unpack the image data.
 
-    uint32_tindex = image.cmd_table[y];
+    uint32_t index = image.cmd_table[y];
     for(;;)
     {
         const uint8_t command = image.data[index++]
