@@ -139,7 +139,7 @@ An outline is modelled as:
     }
     Outline;
 
-Outlines determine the appropriate number of blank space to the left and right of a sprite's animation frame.
+Outlines determine the appropriate number of transparent pixels to the left and right of a sprite's animation frame.
 
 The `outline_table_offset` from the `Frame` is an array as large as the frame `height` value.
 
