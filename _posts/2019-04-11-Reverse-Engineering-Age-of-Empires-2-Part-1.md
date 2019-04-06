@@ -74,21 +74,21 @@ A table contains a number of files, and their structs, once space is allocated, 
     }
     File
 
-The `data_offset`, in bytes, determines where within the `DRS` database a file format of `slp`, `wav`, or `binary` is placed.
+The `data_offset`, in bytes, determines where within the `DRS` database a file format of `SLP`, `wav`, or `binary` is placed.
 
-`slp` files contain visual animations. `wav` files contain sounds and music. `binary` files contain scripts, or color palettes.
+`SLP` files contain visual animations. `wav` files contain sounds and music. `binary` files contain scripts, or color palettes.
 
-Both terrain and unit sprite / building animations are stored as `slp` files within terrain.drs and graphics.drs, respectively.
+Both terrain and unit sprite / building animations are stored as `SLP` files within terrain.drs and graphics.drs, respectively.
 
-Static GUI bitmaps are also stored in `slp` files, but within interfac.drs.
+Static GUI bitmaps are also stored in `SLP` files, but within interfac.drs.
 
-Nevertheless, given both a table index and file index, either an `slp`, `wav`, or `binary` file may be loaded from disk.
+Nevertheless, given both a table index and file index, either an `SLP`, `wav`, or `binary` file may be loaded from disk.
 
-## Loading an `slp` File.
+## Loading an SLP File.
 
-`https://github.com/glouw/aoklite/blob/master/src/Slp.c`
+`https://github.com/glouw/aoklite/blob/master/src/slp.c`
 
-`slp` files are modelled as:
+`SLP` files are modelled as:
 
     typedef struct
     {
