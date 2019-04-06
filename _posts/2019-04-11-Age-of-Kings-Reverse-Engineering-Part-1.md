@@ -130,7 +130,7 @@ And images are modelled as:
     Image;
 
 
-An Outline is modelled as:
+An outline is modelled as:
 
     typedef struct
     {
@@ -145,7 +145,7 @@ The `outline_table_offset` from the `Frame` is an array as large as the frame `h
 
 Using a y-index to index the `outline_table_offset` array will yield an address for indexing
 the `data` array of `Image`. This data array will contain an array of color palette indices
-and command values dictating the blitting action of the color palette values and is finally
+and command values dictating the blitting action of the color palette values. The array is finally
 terminated with `0xFF`.
 
 `https://github.com/glouw/aoklite/blob/master/src/Scanline.c`
