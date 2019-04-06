@@ -76,7 +76,7 @@ A table contains a number of files, and their structs, once space is allocated, 
 
 The `data_offset`, in bytes, determines where within the DRS database a file format of SLP, wav, or binary is placed.
 
-SLP files contain visual animations. wav files contain sounds and music. binary files contain scripts, or color palettes.
+SLP files contain visual animations. Wav files contain sounds and music. Binary files contain scripts, or color palettes.
 
 Both terrain and unit sprite / building animations are stored as SLP files within terrain.drs and graphics.drs, respectively.
 
