@@ -20,7 +20,7 @@ and `terrain.drs` contains all isometric terrain tiles.
 
 ## Loading a DRS Database.
 
-https://github.com/glouw/aoklite/blob/master/src/Drs.c
+`https://github.com/glouw/aoklite/blob/master/src/Drs.c`
 
 A DRS database is essentially modelled as
 
@@ -86,7 +86,7 @@ Nevertheless, given both a table index and file index, either an SLP, WAV, or BI
 
 ## Loading an SLP File.
 
-https://github.com/glouw/aoklite/blob/master/src/Slp.c
+`https://github.com/glouw/aoklite/blob/master/src/Slp.c`
 
 SLP files are modelled as:
 
@@ -148,7 +148,7 @@ the `data` array of `Image`. This data array will contain an array of color pale
 and command values dictating the blitting action of the color palette values and is finally
 terminated with `0xFF`.
 
-https://github.com/glouw/aoklite/blob/master/src/Scanline.c
+`https://github.com/glouw/aoklite/blob/master/src/Scanline.c`
 
 This requires a tiny virtual machine to unpack the image data.
 
@@ -197,7 +197,7 @@ The color palette is standard RGB, and is packed as PAL-JASC:
     }
     Palette;
 
-https://github.com/glouw/aoklite/blob/master/src/Palette.c
+`https://github.com/glouw/aoklite/blob/master/src/Palette.c`
 
 Unpacking is a string of `fscanf` calls:
 
