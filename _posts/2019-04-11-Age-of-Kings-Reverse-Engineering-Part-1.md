@@ -185,7 +185,7 @@ This requires a tiny virtual machine to unpack the image data.
     }
 
 Once the color palette values are unpacked, the `palette_offset` from Frame dictates which
-palette to load from interfac.drs, BINARY table 0, file 45 + `palette_offset`.
+palette to load from `interfac.drs`, BINARY table `0`, `file 45 + palette_offset`.
 The color palette is standard RGB, and is packed as PAL-JASC:
 
     typedef struct
