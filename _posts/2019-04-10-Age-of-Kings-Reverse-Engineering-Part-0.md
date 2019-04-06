@@ -4,11 +4,11 @@ layout: post
 
 This series will be dedicated to reverse engineering Age of Empires II - The Age of Kings.
 
-    Part 0: Introduction and Tooling.
-    Part 1: Data loading and unpacking
-    Part 2: Terrain placement and tilemap editing.
+Part 0: Introduction and tooling.
+Part 1: Data loading and unpacking
+Part 2: Terrain placement and tilemap editing.
 
-    Part X: ... (TBD)
+Part X: ... (TBD)
 
 ## Introduction
 
@@ -31,9 +31,7 @@ and boats are selected.
 
 ## Tooling
 
-This series will be using your standard ISO C99 compiler, SDL2, and a Makefile. C99 was selected over C++17 only because
-a recent draft by the C++ committee opted to include modules with the C++20 release and I don't trust myself to not rewrite
-the entire codebase when that happens.
+This series will be using your standard ISO C99 compiler, SDL2, and a Makefile.
 
 Source code will not ship with the game binary DRS database.
 You will need to install the Age of Empires 2 - The Age of Kings Demo. The installation also works in wine if you are in Linux.
