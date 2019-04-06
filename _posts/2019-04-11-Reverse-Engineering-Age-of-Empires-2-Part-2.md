@@ -25,10 +25,10 @@ a mega grass tile.
 
 `https://github.com/glouw/aoklite/blob/master/src/Sdl.c`
 
-The animation to use, however, is dictated by:
+The animation frame index to use, however, is dictated by:
 
     int bound = sqrt(tile_count) // Roughly 100 for tile_count
-    int animation = (x % bound) + ((y % bound) * bound);
+    int index = (x % bound) + ((y % bound) * bound);
 
 Given the width and height of each tile is known, and a projection
 transformation of:
