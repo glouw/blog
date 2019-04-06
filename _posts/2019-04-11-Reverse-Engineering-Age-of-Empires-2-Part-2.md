@@ -21,7 +21,7 @@ array is projected isometrically onto the screen like:
                        +
 
 Given array values `a -> p` are all `integers`, and equal to `1`, they will all render
-a grass tile.
+a mega grass tile.
 
 `https://github.com/glouw/aoklite/blob/master/src/Sdl.c`
 
