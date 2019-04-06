@@ -2,13 +2,13 @@
 layout: post
 ---
 
-From `terrain.drs` exists a series terrain files. `File 0` may be dirt, `File 1` grass, and so on.
+From `terrain.drs` exists a series of terrain files. `File 0` may be dirt, `File 1` grass, and so on.
 
 Each `File` has roughly a hundred animation frames that, when unpacked and lined up, create
 one large tile roughly ten times the area.
 
 Programmatically, map data is stored in a 2D array of integers. At runtime, this 2D
-array is projected isometrically onto the screen:
+array is projected isometrically onto the screen like:
 
                        +
     +--------+        /d\
@@ -27,6 +27,7 @@ a grass tile.
 
 The animation to use, however, is dictated by:
 
+    int bound = sqrt(tile_count) // Roughly 100 for tile_count
     int animation = (x % bound) + ((y % bound) * bound);
 
 Given the width and height of each tile is known, and a projection
@@ -42,5 +43,5 @@ the final render with a mix of grass and dirt tiles may look something like:
 
 Of course, this does not include tile blending.
 
-Likewise, if a point is to be clicked on screen, the reverse
-projection calculations are to be applied to query the map.
+Likewise, if a point is to be clicked on screen, the reverse projection calculations are
+to be applied to query the map.
