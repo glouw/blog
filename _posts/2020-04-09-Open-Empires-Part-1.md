@@ -6,8 +6,8 @@ This series will be dedicated to rewriting Age of Empires II - The Age of Kings.
 
 ## Introduction
 
-The goal of this series is to implement an 8 player multiplayer map, starting each player in the dark age as they
-work their way into the Castle age. Certain simplifications, like omitting terrain elevations and civilizations,
+The goal of this series is to implement an 8 player multiplayer map, starting each player in the Dark Age as they
+work their way into the Castle Age. Certain simplifications, like omitting terrain elevations and civilizations,
 will be made to reduce overall complexity of the source.
 
 This series will be using your standard ISO C99 compiler, SDL2, and a Makefile.
