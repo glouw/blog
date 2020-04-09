@@ -34,22 +34,12 @@ GNU Makefiles and C. One just needs a good template:
     	rm -f $(BIN) $(OBJS) $(DEPS)
 
 
-# So whats going on here?
-
 Dependency files are generated during compilation. If a source file is updated it is solely recompiled and linked.
 If any header is updated then the dependency file is referenced and all source files which included the header are recompiled
 and then linked. If a dependency file is accidentally deleted then it is regenerated. If the Makefile is updated then all source
-files are recompiled and linked.
+files are recompiled and linked. Simply add your new source files to SRCS, compiler flags to CFLAGS, libraries to LDLIBS, and linker flags to LDFLAGS.
 
-# So what do I do?
-
-Simply add your new source files to SRCS, compiler flags to CFLAGS, libraries to LDLIBS, and linker flags to LDFLAGS.
-
-# Can I use this with C++?
-
-Yes, change CC to CXX, gcc to g++, CFLAGS to CXXFLAGS, and all .c files to .cpp files.
-
-# How about a real implementation?
+As for C++ compatibility, change CC to CXX, gcc to g++, CFLAGS to CXXFLAGS, and all .c files to .cpp files.
 
 Check out the [Makefile for Andvaranaut.](https://github.com/glouw/andvaranaut/blob/master/src/Makefile)
 
