@@ -31,5 +31,6 @@ A cool exercise nonetheless. I have never seen water rendered on the CPU looking
 but at this point, even on an i5-3320M with 4 logical cores, this renderer may as well be a
 ray tracer with its 0.5 FPS render speed.
 
-Anyway, checkout the source if you like. The creation and tunnel shaders are totally worth
-studying. I will maybe return one day and breakdown the math behind the seascape shader.
+Anyway, [the full source is here](https://github.com/glouw/softshader).
+The creation and tunnel shaders are totally worth studying.
+I will maybe one day study and blog the math behind the seascape shader.
