@@ -32,5 +32,37 @@ but at this point, even on an i5-3320M with 4 logical cores, this renderer may a
 ray tracer with its 0.5 FPS render speed.
 
 Anyway, [the full source is here](https://github.com/glouw/softshader).
-The creation and tunnel shaders are totally worth studying.
-I will maybe one day study and blog the math behind the seascape shader.
+The creation and tunnel shaders are totally worth studying. The setup for the creation shader
+goes something like:
+
+    #include "softshader.hh"
+
+    static uint32_t shade(const ss::V2 coord)
+    {
+        const auto per = coord / ss::res;
+        auto c = ss::V3 {};
+        auto l = 0.f;
+        auto z = ss::uptime();
+        for(int i = 0; i < 3; i++)
+        {
+            const auto p = (per - 0.5f) * ss::V2 { ss::res.x / ss::res.y, 1.f };
+            l = ss::length(p);
+            z += 0.07f;
+            const auto uv = per + p / l * (ss::sin(z) + 1.f) * ss::abs(ss::sin(l * 9.f - z * 2.f));
+            const auto cc = ss::length(ss::abs(ss::mod(uv, 1.f) - 0.5f));
+            c[i] = (cc == 0.f) ? 1.f : (0.01f / cc);
+        }
+        const auto v = c / l;
+        return v.color(ss::uptime());
+    }
+
+    int main()
+    {
+        ss::run(shade);
+    }
+
+As you can see, in true Shadertoy fashion, softshader's transfer function takes
+a 2D coordinate point as its input and returns a 32bit color value. All the multhreading
+for this transfer function is handled internally by the softshader header include.
+
+As for the seascape shader, maybe I will one day learn and share the math that powers it.
