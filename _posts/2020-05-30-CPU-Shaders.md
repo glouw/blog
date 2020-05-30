@@ -18,7 +18,7 @@ Tunnel, by Inigo Quilez (shadertoy.com/user/iq)
 
 ![tunnel](/images/ss/tunnel.png)
 
-The math escapes me, but I used this exercise as an introduction to C++11.
+The math escapes me, but I used this exercise as an introduction to C++17 (or portions thereof).
 The shaders request a single uint32_t pointer from SDL2 and then proceeds to divide
 the screen into as many horizontal rows as there are logical cores on your CPU. Each
 render row is rendered in tandem with the others.
