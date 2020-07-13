@@ -13,7 +13,7 @@ The eternal memory allocator, malloc, being declared as:
 
     void* malloc(size_t size);
 
-Yields a plugin to a generic node datatype:
+yields a plugin to a generic node datatype:
 
     typedef struct Node
     {
