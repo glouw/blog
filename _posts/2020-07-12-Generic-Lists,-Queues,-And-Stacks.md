@@ -291,8 +291,8 @@ The doubly linked list, being as flexible as it is, just needs a couple renames 
     #define Queue_Init(destruct) List_Init(destruct)
     #define Queue_Free(self) List_Free(self)
     #define Queue_Enqueue(self, data) List_Push(self, data, TAIL)
-    #define Queue_Dequeue(self, data) List_Pop(self, self->head, false)
-    #define Queue_Peek(self, data) (self->head->data);
+    #define Queue_Dequeue(self) List_Pop(self, self->head, false)
+    #define Queue_Peek(self) (self->head->data);
 
 ## Stacks
 
@@ -301,5 +301,5 @@ And of course, a stack is that of a queue, but popping (dequeues) are done from 
     #define Stack_Init(destruct) List_Init(destruct)
     #define Stack_Free(self) List_Free(self)
     #define Stack_Push(self, data) List_Push(self, data, TAIL)
-    #define Stack_Pop(self, data) List_Pop(self, self->tail, false)
-    #define Stack_Peek(self, data) (self->tail->data)
+    #define Stack_Pop(self) List_Pop(self, self->tail, false)
+    #define Stack_Peek(self) (self->tail->data)
