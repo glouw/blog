@@ -39,13 +39,6 @@ Building a node reserves space for itself, and initializes data given by malloc:
         return node;
     }
 
-Freeing the node does not free the data pointed to by malloc:
-
-    void Node_Free(Node* node)
-    {
-        free(node);
-    }
-
 The doubly linked list points to the head and tail of the list. A destructor will define
 the cleanup method for each node. This destructor callback is only used when the list is freed.
 The size variable indicates the number of nodes in the list.
@@ -125,14 +118,14 @@ and pop those. A destroy callback internally cleans up node data.
             self->destruct(data);
             data = NULL;
         }
-        Node_Free(node);
+        free(node);
         self->size -= 1;
         return data;
     }
 
 All operations on lists are done with loops. A single loop function with a _programmable_ callback
-defines actions to be done on nodes. That is, the list iteration callback can stop or continue at this node,
-or entirely delete the contents of this node.
+defines actions to be done on nodes. That is, the list iteration callback can stop or continue at some node,
+or entirely delete the contents of some node.
 
     typedef enum
     {
