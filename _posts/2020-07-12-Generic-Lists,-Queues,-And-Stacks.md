@@ -154,6 +154,42 @@ The optional _args_ void pointer is used for further extending the functionality
         return NULL;
     }
 
+Sorting lists, via a custom quick sort, requires node swapping and list partitioning and a callback
+for comparing two fields of data:
+
+    void Node_Swap(Node* a, Node* b)
+    {
+        void* temp = a->data;
+        a->data = b->data;
+        b->data = temp;
+    }
+
+    typedef bool (*Compare)(Node* a, Node* b);
+
+    Node* List_Partition(Node* head, Node* tail, const Compare compare)
+    {
+        Node* prev = head->a;
+        for(Node* node = head; node != tail; node = node->b)
+            if(compare(node, tail))
+            {
+                prev = prev ? prev->b : head;
+                Node_Swap(prev, node);
+            }
+        prev = prev ? prev->b : head;
+        Node_Swap(prev, tail);
+        return prev;
+    }
+
+    void List_Sort(Node* head, Node* tail, const Compare compare)
+    {
+        if(tail && head != tail->b)
+        {
+            Node* part = List_Partition(head, tail, compare);
+            List_Sort(head, part->a, compare);
+            List_Sort(part->b, tail, compare);
+        }
+    }
+
 Clearing the list pops the head until the size of the list is 0:
 
     void List_Clear(List* self)
