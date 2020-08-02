@@ -25,18 +25,16 @@ From here:
 
 1. Bitmaps are loaded into RAM with SDL2:
 
-`SDL_Surface* surface = SDL_LoadBMP("frame.bmp");`
+    `SDL_Surface* surface = SDL_LoadBMP("frame.bmp");`
 
 2. The bitmaps are moved from RAM to the GPU:
 
-`SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface)`
+    `SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface)`
 
 3. The bitmap, now residing in GPU memory, are copied the desktop wallpaper:
 
-```
-SDL_RenderCopy(renderer, texture, NULL, NULL);
-SDL_RenderPresent(renderer);
-```
+    `SDL_RenderCopy(renderer, texture, NULL, NULL);`
+    `SDL_RenderPresent(renderer);`
 
 The two NULL arguments specifies the render to stretch fill the background wallpaper. A picture does not
 do an animated wallpaper any justice, [so check it out on youtube](https://www.youtube.com/watch?v=6ZTiA885bWM).
