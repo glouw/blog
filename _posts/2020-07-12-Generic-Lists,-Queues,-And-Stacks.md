@@ -2,10 +2,7 @@
 layout: post
 ---
 
-This post will outline a generic solution to lists, queues, and stacks (the latter two
-simply being a simple rename of the first) in C99.
-
-Other data structures (trees, hash maps, and the lot) will come at a later date.
+This post will outline a generic solution to lists, queues, and stacks in C99.
 
 ## Doubly Linked Lists
 
