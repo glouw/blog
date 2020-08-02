@@ -4,7 +4,7 @@ layout: post
 
 [Github Source](https://github.com/glouw/paperview)
 
-I recently stumbled upon a small X11 bash script that calls `feh --bg-fill` in a loop over an array of
+I recently stumbled upon a small bash script that calls `feh --bg-fill` in a loop over an array of
 PNG files to animate the desktop background.
 The performance was fairly poor. Cumulative CPU usage was close to 40% on my X230.
 
