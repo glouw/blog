@@ -35,7 +35,7 @@ SDL_Surface* surface = SDL_LoadBMP("frame.bmp");
 SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 ```
 
-3) The bitmap, now residing in GPU memory, are copied the desktop wallpaper:
+3) The bitmap, now residing in GPU memory, are copied to the desktop wallpaper:
 
 ```
 SDL_RenderCopy(renderer, texture, NULL, NULL);
