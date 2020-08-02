@@ -17,5 +17,3 @@ by downloading and installing (with Wine if on Linux) the [Age of Empires 2 - Th
 Below is a quick screen grab of the latest development progress (as of April 9, 2020).
 
 ![Men at Arms vs Men at Arms](/images/openempires/img1.png)
-
-Without further adieu, let's get started.
