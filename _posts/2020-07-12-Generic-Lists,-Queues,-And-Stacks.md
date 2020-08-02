@@ -154,6 +154,22 @@ The optional _args_ void pointer is used for further extending the functionality
         return NULL;
     }
 
+Clearing the list pops the head until the size of the list is 0:
+
+    void List_Clear(List* self)
+    {
+        while(self->size > 0)
+            List_Pop(self, self->head, true);
+    }
+
+Freeing the list calls free, but ensures the list is cleared prior:
+
+    void List_Free(List* self)
+    {
+        List_Clear(self);
+        free(self);
+    }
+
 Sorting lists, via a custom quick sort, requires node swapping and list partitioning and a callback
 for comparing two fields of data:
 
@@ -188,22 +204,6 @@ for comparing two fields of data:
             List_Sort(head, part->a, compare);
             List_Sort(part->b, tail, compare);
         }
-    }
-
-Clearing the list pops the head until the size of the list is 0:
-
-    void List_Clear(List* self)
-    {
-        while(self->size > 0)
-            List_Pop(self, self->head, true);
-    }
-
-Freeing the list calls free, but ensures the list is cleared prior:
-
-    void List_Free(List* self)
-    {
-        List_Clear(self);
-        free(self);
     }
 
 The doubly linked list may now be used in a generic setting, given _data_ is always
