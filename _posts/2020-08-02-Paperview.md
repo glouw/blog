@@ -8,17 +8,13 @@ I recently stumbled upon a small bash script that calls `feh --bg-fill` in a loo
 PNG files to animate the desktop background.
 The performance was fairly poor. Cumulative CPU usage was close to 40% on my X230.
 
-As an alternative, I discovered SDL2 provides a generic interface to create a window from a pixel array,
-including the base root X11 window used by desktop wallpaper setters.
-By opening an X11 display and creating an X11 window, the window can be coerced into a void
-pointer and passed to SDL2:
+As an alternative, I discovered SDL2 can provide a generic interface to create a window from a pixel array,
+including the base root X11 window used by desktop wallpaper setters. That is to say, X11 windows can be
+coerced into a void pointer and passed to SDL2 and accessed via an SDL renderer directly:
 
     Display* x11d = XOpenDisplay(NULL);
     Window x11w = RootWindow(x11d, DefaultScreen(x11d));
     SDL_Window* window = SDL_CreateWindowFrom((void*) x11w);
-
-The desktop wallpaper can interface directly with GPU memory via an SDL2 renderer:
-
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
 From here:
@@ -46,5 +42,4 @@ My X230 uses an integrated Intel video chipset, and fortunately Arch provides a 
 running the following at 1920x1080 (via the VGA port to an external monitor at 60 Hz):
 
     intel_gpu_time ./paperview scenes/castle 5
-
     user: 1.904135s, sys: 0.357277s, elapsed: 100.458648s, CPU: 2.3%, GPU: 11.7%
