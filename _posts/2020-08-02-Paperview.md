@@ -40,7 +40,7 @@ The two NULL arguments specifies the render to stretch fill the background wallp
 do an animated wallpaper any justice, [so check it out on youtube](https://www.youtube.com/watch?v=6ZTiA885bWM).
 
 [Also, try giving the source a read](https://github.com/glouw/paperview). A single file (main.c) in less than 150 lines
-yields a high performance animated desktop wallpaper at 60 frames per second. I decided on the name paperview which stems
+yields a high performance animated desktop wallpaper at 60 frames per second. The name paperview stems
 from pre-Netflix era video services dubbed Pay-Per-View and the _viewing_ of _wallpapers_ in an animated fashion.
 My X230 uses an integrated Intel video chipset, and fortunately Arch provides a nice GPU metric tool;
 running the following at 1920x1080 (via the VGA port to an external monitor at 60 Hz):
