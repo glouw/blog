@@ -32,7 +32,7 @@ From here:
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer);
 
-The two NULL arguments specifies the render to stretch fill the background wallpaper. A picture does not
+The two NULL arguments signal the renderer to stretch fill the background wallpaper. A picture does not
 do an animated wallpaper any justice, [so check it out on youtube](https://www.youtube.com/watch?v=6ZTiA885bWM).
 
 [Also, try giving the source a read](https://github.com/glouw/paperview). A single file (main.c) in less than 150 lines
