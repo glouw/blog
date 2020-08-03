@@ -10,7 +10,7 @@ The performance was fairly poor. Cumulative CPU usage was close to 40% on my X23
 
 As an alternative, I discovered SDL2 can provide a generic interface to create a window from a pixel array,
 including the base root X11 window used by desktop wallpaper setters. That is to say, X11 windows can be
-coerced into a void pointer and passed to SDL2 and accessed via an SDL renderer directly:
+coerced into a void pointer and passed to SDL2 and directly accessed via an SDL renderer:
 
     Display* x11d = XOpenDisplay(NULL);
     Window x11w = RootWindow(x11d, DefaultScreen(x11d));
