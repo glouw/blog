@@ -47,6 +47,4 @@ running the following at 1920x1080 (via the VGA port to an external monitor at 6
 
     intel_gpu_time ./paperview scenes/castle 5
 
-Dictates the following CPU and GPU time:
-
     user: 1.904135s, sys: 0.357277s, elapsed: 100.458648s, CPU: 2.3%, GPU: 11.7%
