@@ -170,43 +170,33 @@ Freeing the list calls free, but ensures the list is cleared prior:
         free(self);
     }
 
-Sorting lists, via a custom quick sort, requires node swapping and list partitioning and a callback
-for comparing two fields of data:
+Sorting is best left to the standard library's quick sort since list indexing
+is an O(n) operation. This is accomplished by copying only the data pointers to a cache.
+The cache is then sorted and placed back - in order - in place of the previous node data
+pointers.
 
-    void Node_Swap(Node* a, Node* b)
+    typedef int (*Compare)(const void*, const void* b);
+
+    void Sort(List* list, Compare compare)
     {
-        void* temp = a->data;
-        a->data = b->data;
-        b->data = temp;
+        void** cache = malloc(list->size * sizeof(*cache));
+        int32_t index = 0;
+        for(Node* node = list->head; node; node = node->next)
+            cache[index++] = node->data;
+        qsort(cache, list->size, sizeof(*cache), compare);
+        index = 0;
+        for(Node* node = list->head; node; node = node->next)
+            node->data = cache[index++];
+        free(cache);
     }
 
-    typedef bool (*Compare)(Node* a, Node* b);
+Although some cache misses may arise due to non-contiguous nature of list nodes allocations,
+node data pointer swapping is cheap, and the data itself is not moved which is highly benificial to
+game engines, for instance, where data pieces reference one another with pointers.
 
-    Node* List_Partition(Node* head, Node* tail, const Compare compare)
-    {
-        Node* prev = head->a;
-        for(Node* node = head; node != tail; node = node->b)
-            if(compare(node, tail))
-            {
-                prev = prev ? prev->b : head;
-                Node_Swap(prev, node);
-            }
-        prev = prev ? prev->b : head;
-        Node_Swap(prev, tail);
-        return prev;
-    }
+## Examples
 
-    void List_Sort(Node* head, Node* tail, const Compare compare)
-    {
-        if(tail && head != tail->b)
-        {
-            Node* part = List_Partition(head, tail, compare);
-            List_Sort(head, part->a, compare);
-            List_Sort(part->b, tail, compare);
-        }
-    }
-
-The doubly linked list may now be used in a generic setting, given _data_ is always
+The doubly linked list excelt in generic settings, given _data_ is always
 allocated by malloc (note free is passed as the destructor for free as no internal cleanup is required):
 
     List* list = List_Init(free);
@@ -255,7 +245,7 @@ first node found:
         int* key = args;
         if(*integer == *key)
             return STOP;
-        else 
+        else
             return CONTINUE;
     }
 
@@ -301,8 +291,8 @@ into a new list, searched for by name, deleted, printed, and so on:
     {
         Person* person = data;
         if(strcmp(person->name, args) == 0)
-            return STOP; 
-        else 
+            return STOP;
+        else
             return CONTINUE;
     }
 
