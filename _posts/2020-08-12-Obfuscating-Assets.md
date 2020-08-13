@@ -6,12 +6,12 @@ Often times one needs to obfuscate game assets. If a game relies on BMP files, S
 and vim, the first step to obfuscating the assets without the need of cryptography is already done.
 
 SDL2 has out of the box support for Windows BMP files. The macro to load BMP files is declared in
-SDL_Surface.h and takes a file path string as an argument:
+`SDL_Surface.h` and takes a file path string as an argument:
 
     #define SDL_LoadBMP(file) SDL_LoadBMP_RW(SDL_RWFromFile(file, "rb"), 1)
 
 By dissecting the contents of `SDL_LoadBMP` we learn `SDL_RWFromFile` returns an `SDL_RWops` pointer.
-Fortunately, an alternative declaration in SDL_rwops.h exists, and it allows for a generic read from raw memory:
+Fortunately, an alternative declaration in `SDL_rwops.h` exists, and it allows for a generic read from raw memory:
 
     extern DECLSPEC SDL_RWops *SDLCALL SDL_RWFromMem(void *mem, int size);
 
@@ -40,12 +40,12 @@ of the array:
     };
     unsigned int Image_bmp_len = 373;
 
-Loading the BMP image is just a matter of using the newly crafted SDL_LoadBMPFromMem macro:
+Loading the BMP image is just a matter of using the newly crafted `SDL_LoadBMPFromMem` macro:
 
     SDL_Surface* arrow = SDL_LoadBMPFromMem(Image_bmp, Image_bmp_len)
 
 With xxd able to reverse BMP images, and SDL2 being able to natively load BMP images
-without the need of external dependencies like SDL_image, this solution is the first step
+without the need of external dependencies like `SDL_image`, this solution is the first step
 to obfuscating important art assets in a lightweight fashion that would otherwise spoil a game's plot.
 Yes, the game binary will bloat, and the BMP can still be reversed with an `objdump` of the binary,
 but by hiding the BMP in the binary the secret asset will be hidden to most of the players.
