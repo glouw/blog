@@ -20,7 +20,7 @@ a facility for loading BMP files from memory:
 
     #define SDL_LoadBMPFromMem(mem, size) SDL_LoadBMP_RW(SDL_RWFromMem(mem, size))
 
-Thankfully, a hex dumper named xxd comes pre-installed with vim and it includes a huge time saving flag
+Thankfully, a hex dumper named `xxd` comes pre-installed with vim and it includes a huge time saving flag
 named `-include` for transforming a file (in this case, a BMP file) into a C style array with a size constant:
 
     xxd -include Image.bmp
@@ -44,7 +44,7 @@ Loading the BMP image is just a matter of using the newly crafted `SDL_LoadBMPFr
 
     SDL_Surface* arrow = SDL_LoadBMPFromMem(Image_bmp, Image_bmp_len)
 
-With xxd able to reverse BMP images, and SDL2 being able to natively load BMP images
+With `xxd` able to reverse BMP images, and SDL2 being able to natively load BMP images
 without the need of external dependencies like `SDL_image`, this solution is the first step
 to obfuscating important art assets in a lightweight fashion that would otherwise spoil a game's plot.
 Yes, the game binary will bloat, and the BMP can still be reversed with an `objdump` of the binary,
