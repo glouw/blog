@@ -63,6 +63,4 @@ I pushed this concept to the extreme, and backported the core of the C++11 STL
 to ISO C99/C11. As per a measure of safety, each push to `master` or `staging` kicks
 off a 3 hour test suite which randomly runs each container function against the STL
 and checks for inconsistencies. As of writing, `unordered_set` is not implemented -
-the holidays has effectively put me in vacation mode:
-
-[GitHub Source](https://github.com/glouw/ctl)
+the holidays has effectively put me in vacation mode, [but have yourself a look](https://github.com/glouw/ctl).
