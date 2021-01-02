@@ -18,22 +18,14 @@ Tunnel, by Inigo Quilez (shadertoy.com/user/iq)
 
 ![tunnel](/images/ss/tunnel.png)
 
-The math escapes me, but I used this exercise as an introduction to C++17 (or portions thereof).
-The shaders request a single uint32_t pointer from SDL2 and then proceeds to divide
+The shaders request a single `uint32_t` pointer from SDL2 and then proceeds to divide
 the screen into as many horizontal rows as there are logical cores on your CPU. Each
 render row is rendered in tandem with the others.
 
 The performance is strong for the creation and tunnel shaders, averaging
 60 FPS with vertical sync, but the seascape shader runs at a steady 0.5 FPS, even without
-antialiasing.
-
-A cool exercise nonetheless. I have never seen water rendered on the CPU looking this good,
-but at this point, even on an i5-3320M with 4 logical cores, this renderer may as well be a
-ray tracer with its 0.5 FPS render speed.
-
-Anyway, [the full source is here](https://github.com/glouw/softshader).
-The creation and tunnel shaders are totally worth studying. The setup for the creation shader
-goes something like:
+antialiasing. [The full source is here](https://github.com/glouw/softshader).
+The creation and tunnel shaders are worth the study:
 
     #include "softshader.hh"
 
@@ -60,9 +52,3 @@ goes something like:
     {
         ss::run(shade);
     }
-
-As you can see, in true Shadertoy fashion, softshader's transfer function takes
-a 2D coordinate point as its input and returns a 32bit color value. All the multhreading
-for this transfer function is handled internally by the softshader header include.
-
-As for the seascape shader, maybe I will one day learn and share the math that powers it.
