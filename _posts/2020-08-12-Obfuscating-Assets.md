@@ -18,7 +18,7 @@ Fortunately, an alternative declaration in `SDL_rwops.h` exists, and it allows f
 Combining this call with `SDL_LoadBMP_RW` forms a new definition, `SDL_LoadBMPFromMem`, and it provides
 a facility for loading BMP files from memory:
 
-    #define SDL_LoadBMPFromMem(mem, size) SDL_LoadBMP_RW(SDL_RWFromMem(mem, size))
+    #define SDL_LoadBMPFromMem(mem, size) SDL_LoadBMP_RW(SDL_RWFromMem(mem, size), 0)
 
 Thankfully, a hex dumper named `xxd` comes pre-installed with vim and it includes a huge time saving flag
 named `-include` for transforming a file (in this case, a BMP file) into a C style array with a size constant:
