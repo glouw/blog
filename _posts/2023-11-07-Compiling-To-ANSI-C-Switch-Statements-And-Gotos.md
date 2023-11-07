@@ -227,7 +227,7 @@ Combine the if-statement, the while loop, and then function call syntaxing, and 
 pointers, operators, and everything else that makes a language expressive, of course). Furthermore,
 ANSI-C proves to serve as a highly portable stack machine (with a bit of creativity),
 which makes a perfect target for compilation (or transpilation if we are being pedantic).
-I have a fully functional `switch` compiler/transpiler that you can find on my
+I have a fully functional `switch` compiler / transpiler that you can find on my
 [GitHub page](https://github.com/glouw/switch). There are more `switch` examples there to be found,
 including string usage, and integer printing (I regulated myself to _only_ having access to libc's
 `putchar`, which is accessed through the `$` operator).
