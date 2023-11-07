@@ -70,12 +70,12 @@ int main(void)
     register int sp = 0;
     goto main;
 main:
-    INT(1);
-    BRZ(L0);
-    BRA(L1);
+	INT(1);
+	BRZ(L0);
+	INT(2);
+	POP();
+	BRA(L1);
 L0:
-    INT(2);
-    POP();
 L1:
     return 0;
 }
@@ -85,9 +85,8 @@ a stack pointer `sp` to track variable pushes and pops to the variable stack.
 The `register` keyword prepended to `sp` serves no purpose but to document the
 modeling of the stack machine. A `goto main` statement acts as a reset vector, placing
 execution at the goto label `main`. An integer of 1 is loaded, and branches to `L0`
-should the integer be zero, otherwise, the next instruction executes, branching to `L1`, which
-signifies the end of the program. Integer 1 is popped by the `BRZ` instruction in either
-case.
+should the integer be zero, otherwise, the next instruction executes, eventually branching to `L1`, which
+signifies the end of the program. Integer 1 is popped by the `BRZ` instruction.
 
 Within the body of the if-statement lies an expression without assignment, which loads integer 2,
 but subsequently pops the integer from the stack. It serves only to have _some form of
@@ -108,7 +107,7 @@ int main()
 ```
 Our while loop uses the same inner workings as the if statement.
 Integer 1 is pushed to the stack, and branches to `L1` (the end
-of the program) if it is not zero. The loop pushes and pops integer 2
+of the program) if it is zero. The loop pushes and pops integer 2
 for the exemplary, and a branch to `L0` repeats the loop. In all instances,
 integer 1 is popped form the stack with the `BRZ` instruction.
 
