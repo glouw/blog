@@ -223,7 +223,7 @@ main:
 ```
 
 # Outro
-Combine the if-statement, the while loop, and then function call syntaxing, and we have a working language (barring
+Combine the if-statement, the while loop, and the function call syntaxing, and we have a working language (barring
 pointers, operators, and everything else that makes a language expressive, of course). Furthermore,
 ANSI-C proves to serve as a highly portable stack machine (with a bit of creativity),
 which makes a perfect target for compilation (or transpilation if we are being pedantic).
@@ -233,7 +233,7 @@ including string usage, and integer printing (I regulated myself to _only_ havin
 `putchar`, which is accessed through the `$` operator).
 
 And alas, `switch` does not support function pointers without a GNU extension that allows the address of labels
-to be taken as values, in example:
+to be taken as values, for example:
 
 ```
 label:
