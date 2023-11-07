@@ -4,7 +4,7 @@ layout: post
 
 [GitHub Source](https://github.com/glouw/switch)
 
-Let us use ANSI-C (C90) to transpile a target language to an intermediate ANSI-C file.
+Let us use ANSI-C (C90) to compile (or transpile, for the pedantic) a target language to an intermediate ANSI-C file.
 
 # The Target Language
 
