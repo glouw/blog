@@ -38,7 +38,7 @@ int main()
 ```
 This example provides basic operators, a function call with a return, variables,
 loops, and conditional branching. Sparing the complexities of recursive descent parsing,
-lexing, and BNF, this post aims to share the workings of switch's transpiled if-statements,
+lexing, and BNF, this post aims to share the workings of `switch`'s transpiled if-statements,
 while loops, and function calls / returns.
 
 # The If Statement
