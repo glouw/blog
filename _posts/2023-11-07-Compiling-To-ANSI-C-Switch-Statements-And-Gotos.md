@@ -223,7 +223,7 @@ main:
 ```
 
 # Outro
-Combine if-statements, while loops, and function calls, and we have a working language (barring
+Combine the if-statement, the while loop, and then function call syntaxing, and we have a working language (barring
 pointers, operators, and everything else that makes a language expressive, of course). Furthermore,
 ANSI-C proves to serve as a highly portable stack machine (with a bit of creativity),
 which makes a perfect target for compilation (or transpilation if we are being pedantic).
@@ -242,8 +242,8 @@ label:
     void* ptr = &&label;
 ```
 
-Other than that, I leave you with `qsort` transpilable with `switch`, and then it's post
-processed intermediate ANSI C file:
+Other than that, I leave you with `qsort.sw`, which is fully transpilable with `switch`, and I leave you
+with the post processed intermediate ANSI C file (`gcc -E qsort.c`).
 
 `qsort.sw`
 ```
@@ -285,7 +285,7 @@ int main()
     qsort(a, 0, @a - 1); # The `@` operator returns the size of the array.
 }
 ```
-May you all have a good day:
+May you all have a good day.
 
 `gcc -E qsort.c`
 ```
