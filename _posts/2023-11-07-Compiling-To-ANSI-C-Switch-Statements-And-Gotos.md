@@ -33,7 +33,7 @@ int main()
     {
         ret 0;
     }
-    ret 1
+    ret 1;
 }
 ```
 This example provides basic operators, a function call with a return, variables,
