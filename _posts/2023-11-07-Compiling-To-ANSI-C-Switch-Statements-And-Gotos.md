@@ -70,11 +70,11 @@ int main(void)
     register int sp = 0;
     goto main;
 main:
-	INT(1);
-	BRZ(L0);
-	INT(2);
-	POP();
-	BRA(L1);
+    INT(1);
+    BRZ(L0);
+    INT(2);
+    POP();
+    BRA(L1);
 L0:
 L1:
     return 0;
