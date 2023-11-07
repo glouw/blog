@@ -170,10 +170,10 @@ with the same line number.
 
 `RET` stores the top of the variable stack in the return register `rr`, decrements the
 function pointer `fp`, reloads the previous `sp` and `fa` register values from their respective
-stacks, and place the return register `rr` on top of the variable stack `vs`. The return function
+stacks, and places the return register `rr` on top of the variable stack `vs`. The return function
 address, now residing in `fa`, is jumped to by the switch statement after jumping to the `begin` label.
 
-As the program concludes, a POP() instruction after the CAL() instruction ensures the stack is cleaned up
+As the program concludes, a `POP()` instruction after the `CAL()` instruction ensures the stack is cleaned up
 of integer 9.
 
 `func.c`
@@ -225,7 +225,7 @@ main:
 
 # Outro
 Combine if-statements, while loops, and function calls, and we have a working language (barring
-pointers, operators, and everything else that makes a language expressive, of course. Furthermore,
+pointers, operators, and everything else that makes a language expressive, of course). Furthermore,
 ANSI-C proves to serve as a highly portable stack machine (with a bit of creativity),
 which makes a perfect target for compilation (or transpilation if we are being pedantic).
 I have a fully functional `switch` compiler/transpiler that you can find on my
