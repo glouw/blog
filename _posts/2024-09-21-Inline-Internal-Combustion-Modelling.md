@@ -8,7 +8,7 @@ fluid mechanics, classical dynamics, and (should you deviate from the above), hi
 
 Applications include, but are not limited to, game development vehicular audio and physics:
 
-// -> EMBED VIDEO HERE OF INLINE 5
+<iframe width="560" height="315" src="https://www.youtube.com/embed/7j7jnZ-rat0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 ## The Piston and Classical Dynamics
 
@@ -26,7 +26,7 @@ struct piston
     double theta_r;
     double conrod_m;
     double conrod_crank_throw_m;
-}
+};
 ```
 
 The piston updates with an applied angular velocity (in radians per second). The delta radians
@@ -94,7 +94,7 @@ calc_lift_ratio(double theta_r, double engage_r, double ramp_r)
 Where four stroke modulation is calculated as:
 
 ```
-#define double FOUR_STROKE_R (4.0 * M_PI)
+#define FOUR_STROKE_R (4.0 * M_PI)
 
 double
 calc_theta_mod_four_stroke_r(double theta_r)
@@ -294,7 +294,7 @@ the static temperature of the gas:
 void
 compress_adiabatically(struct chamber* self, double new_volume_m3)
 {
-    self->gas.static_temperature_k *= pow(self->volume_m3 / new_volume_m3, calc_gamma(&self->gas) - 1.0);
+    self->gas.static_temperature_k *= pow(self->volume_m3 / new_volume_m3, calc_gamma(self) - 1.0);
     self->volume_m3 = new_volume_m3;
 }
 ```
@@ -312,7 +312,7 @@ double
 calc_mach_number(double total_pressure_upstream_pa, double total_pressure_downstream_pa, double gamma_downstream)
 {
     double compression_ratio = total_pressure_upstream_pa / total_pressure_downstream_pa;
-    return sqrt((pow(compression_ratio, gamma_downstream / (gamma_downstream - 1.0)) - 1.0) * (2.0 / (gamma_downstream - 1.0)))
+    return sqrt((pow(compression_ratio, gamma_downstream / (gamma_downstream - 1.0)) - 1.0) * (2.0 / (gamma_downstream - 1.0)));
 }
 ```
 
@@ -358,7 +358,7 @@ conserve momentum between the upstream and downstream chamber.
 
 The mass flowed from chamber to chamber is then:
 ```
-double mass_flowed_k = mass_flow_rate_kg_per_s * DT_S;
+double mass_flowed_kg = mass_flow_rate_kg_per_s * DT_S;
 ```
 
 And the bulk momentum flowed from chamber to chamber is then:
@@ -399,8 +399,8 @@ Note that adding moles to a chamber increases the chamber's static temperature, 
 
 Momentum between chambers is then conserved by:
 ```
-x->gas.bulk_momentum_kg_m_per_s -= bulk_momentum_flowed_kg_m_per_s
-y->gas.bulk_momentum_kg_m_per_s += bulk_momentum_flowed_kg_m_per_s
+x->gas.bulk_momentum_kg_m_per_s -= bulk_momentum_flowed_kg_m_per_s;
+y->gas.bulk_momentum_kg_m_per_s += bulk_momentum_flowed_kg_m_per_s;
 ```
 
 And the downstream chamber, assuming flow always occurs from x to y, has its air, fuel, and combusted ratios mixed with the inflowing gas:
@@ -447,10 +447,10 @@ inject_directly(struct chamber* self)
     double new_air_moles = current_air_moles;
     double new_fuel_moles = current_fuel_moles + delta_fuel_moles;
     double new_combusted_moles = current_combusted_moles;
-    add_moles_adiabatically(self, delta_fuel_moles);
-    air_ratio = new_air_moles / self->gas.moles;
-    fuel_ratio = new_fuel_moles / self->gas.moles;
-    combusted_ratio = new_combusted_moles / self->gas.moles;
+    add_moles(self, delta_fuel_moles);
+    self->gas.air_ratio = new_air_moles / self->gas.moles;
+    self->gas.fuel_ratio = new_fuel_moles / self->gas.moles;
+    self->gas.combusted_ratio = new_combusted_moles / self->gas.moles;
 }
 ```
 
@@ -470,17 +470,14 @@ calc_flame_speed_m_per_s(struct chamber* self)
     double laminar_flame_speed_m_per_s = 0.4;
     return laminar_flame_speed_m_per_s
         * pow(calc_static_pressure_pa(self) / STP_PRESSURE_PA, pressure_exponent)
-        * pow(self->static_temperature_k / STP_TEMPERATURE_K, temperature_exponent);
+        * pow(self->gas.static_temperature_k / STP_TEMPERATURE_K, temperature_exponent);
 }
 ```
 
 Knowing the volume of the gas chamber burned for time step `DT_S`, the burned ratio is defined as:
 
 ```
-double burned_ratio
-{
-    volume_burned_m3 / self->volume_m3
-};
+double burned_ratio = volume_burned_m3 / chamber->volume_m3;
 ```
 
 And the delta change in static temperature is defined as:
@@ -491,7 +488,7 @@ And the delta change in static temperature is defined as:
 double
 calc_delta_static_temperature_from_burned_afr_k(struct chamber* self, double burned_ratio)
 {
-    double burned_fuel_moles = self->fuel_ratio * self->moles * burned_ratio;
+    double burned_fuel_moles = self->gas.fuel_ratio * self->gas.moles * burned_ratio;
     double burned_fuel_mass_kg = burned_fuel_moles * calc_molar_mass_kg_per_mol(self);
     double energy_released_j = burned_fuel_mass_kg * GASOLINE_LOWER_HEATING_VALUE_J_PER_KG;
     return energy_released_j / (calc_mass_kg(self) * calc_specific_heat_capacity_at_constant_pressure_j_per_kg_k(self));
@@ -508,7 +505,7 @@ calc_specific_heat_capacity_at_constant_volume_j_per_kg_k(struct chamber* self)
 }
 
 double
-calc_specific_heat_capacity_at_constant_pressure_j_per_kg_k(self)
+calc_specific_heat_capacity_at_constant_pressure_j_per_kg_k(struct chamber* self)
 {
     return calc_gamma(self) * calc_specific_heat_capacity_at_constant_volume_j_per_kg_k(self);
 }
@@ -522,7 +519,7 @@ For model simplification, the standard atmospheric temperature is used as an app
 double
 calc_adiabatic_flame_static_temperature_k(struct chamber* self)
 {
-    double air_fuel_ratio = self->air_ratio / self->fuel_ratio;
+    double air_fuel_ratio = self->gas.air_ratio / self->gas.fuel_ratio;
     double energy_density_j_per_kg = GASOLINE_LOWER_HEATING_VALUE_J_PER_KG / (1.0 + air_fuel_ratio);
     return STP_TEMPERATURE_K + energy_density_j_per_kg / calc_specific_heat_capacity_at_constant_pressure_j_per_kg_k(self);
 }
@@ -545,6 +542,7 @@ struct piston
     double conrod_m;
     double conrod_crank_throw_m;
 +   struct chamber chamber;
++   double head_radius_m;
 }
 ```
 
@@ -594,9 +592,10 @@ struct piston
     double conrod_m;
     double conrod_crank_throw_m;
     struct chamber chamber;
+    double head_radius_m;
 +   double conrod_mass_kg;
 +   double head_mass_kg;
-}
+};
 ```
 
 The moment of inertia (in kilograms per meters squared) can be simplified as that of a
