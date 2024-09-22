@@ -61,17 +61,23 @@ F: Air Fuel Mixture is combusted, creating a downwards force on the piston head.
 G: Downwards force creates torque, causing the piston chamber to expand, cooling the piston gas and lowering pressure.
 H: Piston outlet opens. Hot piston air expels to the atmosphere.
 I: Piston outlet closes.
-J: The cycle repeats.
 
-// -> SHOW DEMO OF IICE SINGLE PISTON
+The cycle repeats. The four strokes of an IICE are then defined as:
+
+```
+A + B: Intake stroke (0 * M_PI to 1 * M_PI)
+C + D: Compression stroke (1 * M_PI to 2 * M_PI)
+E + F + G: Expansion Power stroke (2 * M_PI to 3 * M_PI)
+H + I: Exhaust stroke (3 * M_PI to 4 * M_PI)
+```
 
 The input of the Otto cycle relies on its output. That is to say, chamber expansion and compression in
-step B and D require a mechanical force provided by the torque created in step G.
+step B and D require the mechanical force provided by the torque created in step G.
 Since no system is truly perpetual, a secondary _starter_ motor with a large gear ratio
-is tacked on to provide the initial compression and decompression torque. The starter motor then disconnects.
+provides the initial compression and decompression torque. The starter motor then disconnects.
 
-Piston inlet and outlet openness (lift) ratio is a function of piston theta, where `engage_r` (in radians)
-determines at which point valve opening begins, and `ramp_r` the ramp length:
+Piston inlet and outlet openness (lift) ratio is a 4-5-6-7 polynomial function of piston theta,
+where `engage_r` (in radians) determines at which point valve opening begins, and `ramp_r` the ramp length:
 
 ```
 double
@@ -103,17 +109,11 @@ calc_theta_mod_four_stroke_r(double theta_r)
 }
 ```
 
-The Otto cycle can similarly be described with a pressure volume diagram:
-
-// -> DRAW PV DIAGRAM HERE
-
 While our model _can_ be a piston connected to an atmospheric source and sink, engine sound and performance is greatly
 improved upon by adding intake and exhaust chambers. The intake chamber is a lump sum of the throttle chamber, plenum,
-and intake runner, for simplicity's sake. Similarly, the exhaust chamber is a lump sum of the exhaust runner, collector,
+and intake runner. Similarly, the exhaust chamber is a lump sum of the exhaust runner, collector,
 tailpipe, muffler. The lump sum can be further broken down into individual chamber components to achieve more accurate
 engine sounds and performance.
-
-// -> CHAMBERS GO HERE
 
 ## Chamber Definition
 
@@ -129,7 +129,7 @@ struct chamber
 ```
 
 A gas at rest is comprised of some mole count (in moles) and static temperature (in kelvins).
-The mole count specifies the amount of substance, (think gas molecules), physically present.
+The mole count specifies the amount of substance (think gas molecules) physically present in a chamber.
 The static temperature represents the average kinetic energy of the substance (think gas molecules),
 moving in any random direction, while also being at rest in bulk to the observer.
 
@@ -170,10 +170,9 @@ struct gas
 };
 ```
 
-Although to calculate total pressure and total temperature, we are required to compute the mass
-of the gas and the bulk velocity of the gas from the bulk momentum of the gas. The
-mass of the gas requires that we know the molar mass (in kilogram per mol) of the gas. From the
-Otto cycle, the gasses present within any chamber are lumped into either air, fuel, or combusted fuel.
+Although to calculate total pressure and total temperature, the bulk velocity of the gas is to be derived from the
+bulk momentum of the gas. The mass of the gas requires that we know the molar mass (in kilogram per mol) of the gas.
+From the Otto cycle, the gasses present within any chamber are lumped into either air, fuel, or combusted.
 Their specific molar masses are defined as:
 
 ```
@@ -270,7 +269,7 @@ calc_total_temperature_k(struct chamber* self, double mach_number)
 
 The gas gamma value (no dimensions) characterizes how a gas behaves during compression.
 A higher gamma gas generally compresses more easily than a lower gamma gas,
-and raises temperature greater than a lower gamma gas, under the same compression scenario.
+and raises the temperature greater than that of a lower gamma gas, under the same compression scenario.
 The gamma calculation is similar to that of that molar mass calculation:
 
 ```
@@ -302,8 +301,8 @@ compress_adiabatically(struct chamber* self, double new_volume_m3)
 ## Mach Number and Mass Flow Rates
 
 Flow from chamber to chamber is dictated by the mach number, as introduced as `mach_number` in the
-total temperature function. A mach number less than 1.0 indicates that the flow is subsonic,
-and a mach number equal to 1.0 indicates that the flow is choked, or sonic. For purposes of IICE
+total temperature function. A mach number less than 1.0 indicates subsonic flow,
+and a mach number equal to 1.0 indicates choked flow, or sonic flow. For purposes of IICE
 design, mach numbers greater than 1.0 indicated supersonic flow and will not be used. Clamping between 0.0 and 1.0 can be
 applied to the mach number calculation:
 
@@ -330,7 +329,7 @@ calc_mass_flow_rate_kg_per_s(struct chamber* upstream, double mach_number, doubl
 }
 ```
 
-Where the gas constant (in joules per kilogram kelvin) is defined as:
+Where the gas constant of a chamber (in joules per kilogram kelvin) is defined as:
 
 ```
 double
@@ -342,7 +341,7 @@ calc_specific_gas_constant_j_per_kg_k(struct chamber* self)
 
 ## Chamber Mass Transfer
 
-The instantaneous velocity of the gas in the nozzle is derived from the mass flow rate, and total temperature and total pressure of the flow:
+The instantaneous velocity of the gas in the nozzle is derived from the mass flow rate, total temperature, and total pressure of the flow:
 ```
 double
 calc_velocity_m_per_s(struct chamber* self, double mass_flow_rate_kg_per_s, double mach_number, double cross_sectional_flow_area_m2)
@@ -366,7 +365,7 @@ And the bulk momentum flowed from chamber to chamber is then:
 double bulk_momentum_flowed_kg_m_per_s = mass_flowed_kg * velocity_m_per_s;
 ```
 
-In a flow function, where flow always occurs from x to y, where x is the chamber with higher total pressure:
+Given a flow function, where flow always occurs from x to y, where x is the chamber with higher total pressure:
 ```
 void
 flow(struct chamber* x, struct chamber* y, double cross_sectional_flow_area_m2);
@@ -377,14 +376,14 @@ The bulk moles transferred from x to y is defined as:
 double moles_flowed = mass_flowed_kg / calc_molar_mass_kg_per_mol(x);
 ```
 
-And the moles of the two chambers update like:
+And the moles of the two chambers are updated:
 
 ```
 add_moles(x, -moles_flowed);
 add_moles(y, +moles_flowed);
 ```
 
-Where mole addition is defined as:
+Where:
 ```
 void
 add_moles(struct chamber* self, const double delta_moles)
@@ -395,7 +394,7 @@ add_moles(struct chamber* self, const double delta_moles)
     self->gas.moles = new_moles;
 }
 ```
-Note that adding moles to a chamber increases the chamber's static temperature, which in turn increases static pressure.
+Adding moles to a chamber increases the chamber's static temperature, which in turn increases the static pressure.
 
 Momentum between chambers is then conserved by:
 ```
@@ -411,9 +410,7 @@ y->gas.fuel_ratio = calc_weighted_average(y->gas.fuel_ratio, y->gas.moles, x->ga
 y->gas.combusted_ratio = calc_weighted_average(y->gas.combusted_ratio, y->gas.moles, x->gas.combusted_ratio, moles_flowed);
 ```
 
-The upstream chamber is not mixed.
-
-Thermal cooling (or heating) of the downstream gas occurs as well:
+The upstream chamber is not mixed. Thermal cooling (or heating) of the downstream gas also occurs:
 
 ```
 y->gas.static_temperature_k = calc_weighted_average(y->gas.static_temperature_k, y->gas.moles, x->gas.static_temperature_k, moles_flowed);
@@ -431,8 +428,8 @@ calc_weighted_average(const double value1, const double weight1, const double va
 
 ## Direct Fuel Injection and Combustion
 
-Direct fuel injection can be simplified to a lump addition model of gas moles. The fuel
-is added instaneously, at a balanced 14.7 parts air to 1 parts fuel, and the air, fuel,
+Direct fuel injection can be simplified to a lump addition model of fuel gas moles. The fuel
+is added instantaneously, at a balanced 14.7 parts air to 1 parts fuel, and the air, fuel,
 and combusted ratios are updated:
 
 ```
@@ -511,9 +508,9 @@ calc_specific_heat_capacity_at_constant_pressure_j_per_kg_k(struct chamber* self
 }
 ```
 
-The maximum allowable flame temperature is determined by the adiabatic flame tepmerature. Delta static temperature
-changes to chamber static pressure may not exceed the adiabatic flame temperature.
-For model simplification, the standard atmospheric temperature is used as an approximation for intitial temperature:
+The maximum allowable flame temperature is determined by the adiabatic flame temperature. Delta static temperature
+changes to a chamber's static temperature may not exceed the adiabatic flame temperature.
+For model simplification, the standard atmospheric temperature is used as an approximation for initial temperature:
 
 ```
 double
@@ -527,9 +524,10 @@ calc_adiabatic_flame_static_temperature_k(struct chamber* self)
 
 ## Piston Torque Generation
 
-The added static temperature change from combustion directly raises the static pressure of the piston chamber.
+The added static temperature change from combustion directly raises the static pressure of the piston chamber. This
+change in pressure drives the piston head down, creating a torque that drives the camshaft, and thus, the engine.
 
-Modifying our piston struct to support a combustion chamber:
+Modifying the piston to support a combustion chamber:
 
 ```
 struct piston
@@ -546,8 +544,8 @@ struct piston
 }
 ```
 
-The chamber volume and gas states are tracked internally and updated per frame. The torque produced
-by the piston (in newton meters) is defined as:
+The chamber volume and gas states are tracked internally to match the head radius, and updated per frame.
+The torque produced by the gas within the piston (in newton meters) is defined as:
 
 ```
 double
@@ -578,8 +576,11 @@ calc_static_gauge_pressure_pa(struct chamber* self)
 }
 ```
 
-A piston moving at a high speed, especially a piston head with decent mass, creates inertia torque.
-Modifying our piston:
+Note that while a huge positive spike in torque is created during combustion, a negative torque is created during compression.
+A weak starter motor, for instance, may struggle to provide enough torque to counter the initial gas torque created during the compression stroke.
+
+A piston moving at a high speed, especially a piston head with decent mass, creates inertia torque (in newton meters).
+Modifying the piston to support inertia torque:
 
 ```
 struct piston
@@ -638,13 +639,14 @@ And the angular acceleration (in radians per second squared) supplied to the eng
 double angular_acceleration_r_per_s2 = total_torque_nm / total_engine_moment_of_inertia_kg_per_m2;
 ```
 
-Where the total engine moment of inertia accounts for the flywheel mass and radius and the moment of inertia of the piston.
+Where the total engine moment of inertia accounts for the flywheel and piston. The flywheel
+moment of inertia is defined as:
 
 ```
 double flywheel_moment_of_inertia_kg_per_m2 = 0.5 * mass_flywheel_kg * pow(radius_flywheel_m, 2.0);
 ```
 
-Angular velocity is then updated by the angular acceleration time step:
+Angular velocity is then updated by angular acceleration multiplied by the time step:
 
 ```
 angular_velocity_r_per_s += angular_acceleration_r_per_s2 * DT_S;
