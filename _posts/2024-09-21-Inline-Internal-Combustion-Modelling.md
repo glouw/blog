@@ -17,7 +17,7 @@ updates the piston pin's x and y position (in meters) and its bearing x and y po
 The conrod (connecting rod) length (in meters) and crank throw (in meters) are effectively constants.
 
 ```
-struct piston : gas
+struct piston
 {
     double pin_x_m;
     double pin_y_m;
@@ -413,13 +413,13 @@ y->gas.combusted_ratio = calc_weighted_average(y->gas.combusted_ratio, y->gas.mo
 
 The upstream chamber is not mixed.
 
-Thermal cooling (or heating) of the downstream gas occurs too:
+Thermal cooling (or heating) of the downstream gas occurs as well:
 
 ```
 y->gas.static_temperature_k = calc_weighted_average(y->gas.static_temperature_k, y->gas.moles, x->gas.static_temperature_k, moles_flowed);
 ```
 
-Where the weighted function is defined as:
+Where the weighted average function is defined as:
 
 ```
 double
@@ -428,3 +428,227 @@ calc_weighted_average(const double value1, const double weight1, const double va
     return (value1 * weight1 + value2 * weight2) / (weight1 + weight2);
 }
 ```
+
+## Direct Fuel Injection and Combustion
+
+Direct fuel injection can be simplified to a lump addition model of gas moles. The fuel
+is added instaneously, at a balanced 14.7 parts air to 1 parts fuel, and the air, fuel,
+and combusted ratios are updated:
+
+```
+void
+inject_directly(struct chamber* self)
+{
+    double air_fuel_ratio = 14.7;
+    double current_air_moles = self->gas.moles * self->gas.air_ratio;
+    double current_fuel_moles = self->gas.moles * self->gas.fuel_ratio;
+    double current_combusted_moles = self->gas.moles * self->gas.combusted_ratio;
+    double delta_fuel_moles = current_air_moles / air_fuel_ratio - current_fuel_moles;
+    double new_air_moles = current_air_moles;
+    double new_fuel_moles = current_fuel_moles + delta_fuel_moles;
+    double new_combusted_moles = current_combusted_moles;
+    add_moles_adiabatically(self, delta_fuel_moles);
+    air_ratio = new_air_moles / self->gas.moles;
+    fuel_ratio = new_fuel_moles / self->gas.moles;
+    combusted_ratio = new_combusted_moles / self->gas.moles;
+}
+```
+
+With a chamber primed with injected fuel, and the chamber ignited from the top,
+the rate at which the combustion flame burns in the x and y direction (in meters per second)
+is defined as:
+
+```
+#define STP_PRESSURE_PA 101325.0
+#define STP_TEMPERATURE_K 273.15
+
+double
+calc_flame_speed_m_per_s(struct chamber* self)
+{
+    double pressure_exponent = 1.7;
+    double temperature_exponent = 1.2;
+    double laminar_flame_speed_m_per_s = 0.4;
+    return laminar_flame_speed_m_per_s
+        * pow(calc_static_pressure_pa(self) / STP_PRESSURE_PA, pressure_exponent)
+        * pow(self->static_temperature_k / STP_TEMPERATURE_K, temperature_exponent);
+}
+```
+
+Knowing the volume of the gas chamber burned for time step `DT_S`, the burned ratio is defined as:
+
+```
+double burned_ratio
+{
+    volume_burned_m3 / self->volume_m3
+};
+```
+
+And the delta change in static temperature is defined as:
+
+```
+#define GASOLINE_LOWER_HEATING_VALUE_J_PER_KG 44e6
+
+double
+calc_delta_static_temperature_from_burned_afr_k(struct chamber* self, double burned_ratio)
+{
+    double burned_fuel_moles = self->fuel_ratio * self->moles * burned_ratio;
+    double burned_fuel_mass_kg = burned_fuel_moles * calc_molar_mass_kg_per_mol(self);
+    double energy_released_j = burned_fuel_mass_kg * GASOLINE_LOWER_HEATING_VALUE_J_PER_KG;
+    return energy_released_j / (calc_mass_kg(self) * calc_specific_heat_capacity_at_constant_pressure_j_per_kg_k(self));
+}
+```
+
+Where:
+
+```
+double
+calc_specific_heat_capacity_at_constant_volume_j_per_kg_k(struct chamber* self)
+{
+    return calc_specific_gas_constant_j_per_kg_k(self) / (calc_gamma(self) - 1.0);
+}
+
+double
+calc_specific_heat_capacity_at_constant_pressure_j_per_kg_k(self)
+{
+    return calc_gamma(self) * calc_specific_heat_capacity_at_constant_volume_j_per_kg_k(self);
+}
+```
+
+The maximum allowable flame temperature is determined by the adiabatic flame tepmerature. Delta static temperature
+changes to chamber static pressure may not exceed the adiabatic flame temperature.
+For model simplification, the standard atmospheric temperature is used as an approximation for intitial temperature:
+
+```
+double
+calc_adiabatic_flame_static_temperature_k(struct chamber* self)
+{
+    double air_fuel_ratio = self->air_ratio / self->fuel_ratio;
+    double energy_density_j_per_kg = GASOLINE_LOWER_HEATING_VALUE_J_PER_KG / (1.0 + air_fuel_ratio);
+    return STP_TEMPERATURE_K + energy_density_j_per_kg / calc_specific_heat_capacity_at_constant_pressure_j_per_kg_k(self);
+}
+```
+
+## Piston Torque Generation
+
+The added static temperature change from combustion directly raises the static pressure of the piston chamber.
+
+Modifying our piston struct to support a combustion chamber:
+
+```
+struct piston
+{
+    double pin_x_m;
+    double pin_y_m;
+    double bearing_x_m;
+    double bearing_y_m;
+    double theta_r;
+    double conrod_m;
+    double conrod_crank_throw_m;
++   struct chamber chamber;
+}
+```
+
+The chamber volume and gas states are tracked internally and updated per frame. The torque produced
+by the piston (in newton meters) is defined as:
+
+```
+double
+calc_gas_torque_nm(struct piston* self)
+{
+    double area_m2 = calc_circle_area_m2(self->head_radius_m);
+    double term1 = calc_static_gauge_pressure_pa(&self->chamber) * area_m2 * self->conrod_crank_throw_m * sin(self->theta_r);
+    double term2 = 1.0 + (self->conrod_crank_throw_m / self->conrod_m) * cos(self->theta_r);
+    return term1 * term2;
+}
+```
+
+Where:
+
+```
+double
+calc_circle_area_m2(double radius_m)
+{
+    return M_PI * pow(radius_m, 2.0);
+}
+```
+
+```
+double
+calc_static_gauge_pressure_pa(struct chamber* self)
+{
+    return calc_static_pressure_pa(self) - STP_PRESSURE_PA;
+}
+```
+
+A piston moving at a high speed, especially a piston head with decent mass, creates inertia torque.
+Modifying our piston:
+
+```
+struct piston
+{
+    double pin_x_m;
+    double pin_y_m;
+    double bearing_x_m;
+    double bearing_y_m;
+    double theta_r;
+    double conrod_m;
+    double conrod_crank_throw_m;
+    struct chamber chamber;
++   double conrod_mass_kg;
++   double head_mass_kg;
+}
+```
+
+The moment of inertia (in kilograms per meters squared) can be simplified as that of a
+reciprocating mass:
+
+```
+double
+calc_moment_of_inertia_kg_per_m2(struct piston* self)
+{
+    double mass_reciprocating_kg = self->head_mass_kg + 0.5 * self->conrod_mass_kg;
+    double term1 = 1.0;
+    double term2 = self->conrod_crank_throw_m / (4.0 * self->conrod_m);
+    double term3 = pow(self->conrod_crank_throw_m, 2.0) / (8.0 * pow(self->conrod_m, 2.0));
+    return mass_reciprocating_kg * pow(self->conrod_crank_throw_m, 2.0) * (term1 + term2 + term3);
+}
+```
+
+And the inertia torque:
+
+```
+double
+calc_inertia_torque_nm(struct piston* self, double angular_velocity_r_per_s)
+{
+    double term1 = 0.25 * sin(1.0 * self->theta_r) * self->conrod_crank_throw_m / self->conrod_m;
+    double term2 = 0.50 * sin(2.0 * self->theta_r);
+    double term3 = 0.75 * sin(3.0 * self->theta_r) * self->conrod_crank_throw_m / self->conrod_m;
+    return calc_moment_of_inertia_kg_per_m2(self) * pow(angular_velocity_r_per_s, 2.0) * (term1 - term2 - term3);
+}
+```
+
+The total torque produced by the piston is then:
+
+```
+double total_torque_nm = calc_moment_of_inertia_kg_per_m2(piston) + calc_inertia_torque_nm(piston, angular_velocity_r_per_s);
+```
+
+And the angular acceleration (in radians per second squared) supplied to the engine is:
+
+```
+double angular_acceleration_r_per_s2 = total_torque_nm / total_engine_moment_of_inertia_kg_per_m2;
+```
+
+Where the total engine moment of inertia accounts for the flywheel mass and radius and the moment of inertia of the piston.
+
+```
+double flywheel_moment_of_inertia_kg_per_m2 = 0.5 * mass_flywheel_kg * pow(radius_flywheel_m, 2.0);
+```
+
+Angular velocity is then updated by the angular acceleration time step:
+
+```
+angular_velocity_r_per_s += angular_acceleration_r_per_s2 * DT_S;
+```
+
+For IICE with more than one piston, the torques and moment of inertias for each piston are simply added together.
