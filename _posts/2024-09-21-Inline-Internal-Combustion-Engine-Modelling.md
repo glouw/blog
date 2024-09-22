@@ -13,7 +13,7 @@ Applications include, but are not limited to, game development vehicular audio a
 ### Defining the Piston Classical Dynamics
 
 An inline piston's movement is constrained by its vertical axis. Updating a piston's theta (in radians)
-updates the piston pin's x and y position (in meters) and its bearing x and y position (in meters).
+updates the piston pin's y position (in meters) and its bearing x and y position (in meters).
 The conrod (connecting rod) length (in meters) and crank throw (in meters) are effectively constants.
 
 ```
