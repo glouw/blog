@@ -10,7 +10,7 @@ Applications include, but are not limited to, game development vehicular audio a
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/7j7jnZ-rat0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-## The Piston and Classical Dynamics
+### Defining the Piston Classical Dynamics
 
 An inline piston's movement is constrained by its vertical axis. Updating a piston's theta (in radians)
 updates the piston pin's x and y position (in meters) and its bearing x and y position (in meters).
@@ -47,7 +47,7 @@ update_position(struct piston* self, const double angular_velocity_r_per_s)
 }
 ```
 
-## The Piston and the Otto Cycle
+### Defining the Piston Otto Cycle
 
 The piston provides engine torque by igniting a compressed air fuel mixture. This process
 is known as the Otto cycle:
@@ -115,7 +115,7 @@ and intake runner. Similarly, the exhaust chamber is a lump sum of the exhaust r
 tailpipe, muffler. The lump sum can be further broken down into individual chamber components to achieve more accurate
 engine sounds and performance.
 
-## Chamber Definition
+### Defining the Chamber
 
 Chambers are comprised of a volume (in cubic meters) and a gas:
 
@@ -125,7 +125,6 @@ struct chamber
     double volume_m3;
     struct gas gas;
 };
-
 ```
 
 A gas at rest is comprised of some mole count (in moles) and static temperature (in kelvins).
@@ -298,7 +297,7 @@ compress_adiabatically(struct chamber* self, double new_volume_m3)
 }
 ```
 
-## Mach Number and Mass Flow Rates
+### Defining Mach Number and Mass Flow Rates
 
 Flow from chamber to chamber is dictated by the mach number, as introduced as `mach_number` in the
 total temperature function. A mach number less than 1.0 indicates subsonic flow,
@@ -339,7 +338,7 @@ calc_specific_gas_constant_j_per_kg_k(struct chamber* self)
 }
 ```
 
-## Chamber Mass Transfer
+### Defining Mass Transfer Between Chambers
 
 The instantaneous velocity of the gas in the nozzle is derived from the mass flow rate, total temperature, and total pressure of the flow:
 ```
@@ -426,7 +425,7 @@ calc_weighted_average(const double value1, const double weight1, const double va
 }
 ```
 
-## Direct Fuel Injection and Combustion
+### Defining Direct Fuel Injection and Chamber Combustion
 
 Direct fuel injection can be simplified to a lump addition model of fuel gas moles. The fuel
 is added instantaneously, at a balanced 14.7 parts air to 1 parts fuel, and the air, fuel,
@@ -522,7 +521,7 @@ calc_adiabatic_flame_static_temperature_k(struct chamber* self)
 }
 ```
 
-## Piston Torque Generation
+### Defining Piston Torque Generation
 
 The added static temperature change from combustion directly raises the static pressure of the piston chamber. This
 change in pressure drives the piston head down, creating a torque that drives the camshaft, and thus, the engine.
@@ -633,7 +632,9 @@ The total torque produced by the piston is then:
 double total_torque_nm = calc_moment_of_inertia_kg_per_m2(piston) + calc_inertia_torque_nm(piston, angular_velocity_r_per_s);
 ```
 
-And the angular acceleration (in radians per second squared) supplied to the engine is:
+### Defining the Engine's Angular Velocity
+
+The angular acceleration (in radians per second squared) supplied to the engine is:
 
 ```
 double angular_acceleration_r_per_s2 = total_torque_nm / total_engine_moment_of_inertia_kg_per_m2;
@@ -653,3 +654,8 @@ angular_velocity_r_per_s += angular_acceleration_r_per_s2 * DT_S;
 ```
 
 For IICE with more than one piston, the torques and moment of inertias for each piston are simply added together.
+
+### Source
+
+The source for enism2 is currently not released, but check back for future updates on
+engine modelling, particullary a (hopeful) attempt at a V-config.
