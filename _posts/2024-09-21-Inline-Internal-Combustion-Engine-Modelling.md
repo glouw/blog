@@ -52,6 +52,7 @@ update_position(struct piston* self, const double angular_velocity_r_per_s)
 The piston provides engine torque by igniting a compressed air fuel mixture. This process
 is known as the Otto cycle:
 
+```
 A: Piston inlet opens.
 B: Piston chamber expands. Cool atmospheric air draws in.
 C: Piston inlet closes.
@@ -61,6 +62,7 @@ F: Air Fuel Mixture is combusted, creating a downwards force on the piston head.
 G: Downwards force creates torque, causing the piston chamber to expand, cooling the piston gas and lowering pressure.
 H: Piston outlet opens. Hot piston air expels to the atmosphere.
 I: Piston outlet closes.
+```
 
 The cycle repeats. The four strokes of an IICE are then defined as:
 
