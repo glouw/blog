@@ -13,7 +13,7 @@ Applications include, but are not limited to, game development vehicular audio a
 ### Defining the Piston Classical Dynamics
 
 An inline piston's movement is constrained by its vertical axis. Updating a piston's theta (in radians)
-updates the piston pin's y position (in meters) and its bearing x and y position (in meters).
+updates the piston pin's y position (in meters) and its bearing `x` and `y` position (in meters).
 The conrod (connecting rod) length (in meters) and crank throw (in meters) are effectively constants.
 
 ```
@@ -131,8 +131,8 @@ struct chamber
 
 A gas at rest is comprised of some mole count (in moles) and static temperature (in kelvins).
 The mole count specifies the amount of substance (think gas molecules) physically present in a chamber.
-The static temperature represents the average kinetic energy of the substance (think gas molecules),
-moving in any random direction, while also being at rest in bulk to the observer.
+The static temperature represents the average kinetic energy of the substance (think gas molecules)
+moving in any random direction while also being at rest in bulk to the observer.
 
 ```
 struct gas
@@ -271,7 +271,7 @@ calc_total_temperature_k(struct chamber* self, double mach_number)
 The gas gamma value (no dimensions) characterizes how a gas behaves during compression.
 A higher gamma gas generally compresses more easily than a lower gamma gas,
 and raises the temperature greater than that of a lower gamma gas, under the same compression scenario.
-The gamma calculation is similar to that of that molar mass calculation:
+The gamma calculation is similar to that of the molar mass calculation:
 
 ```
 #define GAMMA_COMBUSTED 1.3
@@ -304,8 +304,8 @@ compress_adiabatically(struct chamber* self, double new_volume_m3)
 Flow from chamber to chamber is dictated by the mach number, as introduced as `mach_number` in the
 total temperature function. A mach number less than 1.0 indicates subsonic flow,
 and a mach number equal to 1.0 indicates choked flow, or sonic flow. For purposes of IICE
-design, mach numbers greater than 1.0 indicated supersonic flow and will not be used. Clamping between 0.0 and 1.0 can be
-applied to the mach number calculation:
+design, mach numbers greater than 1.0 indicated supersonic flow and will not be used. A clamp
+between 0.0 and 1.0 can be applied to the mach number calculation:
 
 ```
 double
@@ -353,8 +353,8 @@ calc_velocity_m_per_s(struct chamber* self, double mass_flow_rate_kg_per_s, doub
 }
 ```
 
-The instantaneous velocity does not dictate the bulk velocity of the gas in the upstream or downstream chamber, but serves to
-conserve momentum between the upstream and downstream chamber.
+The instantaneous velocity does not dictate the bulk velocity of the gas in the upstream or downstream chambers, but serves to
+conserve momentum between the upstream and downstream chambers.
 
 The mass flowed from chamber to chamber is then:
 ```
@@ -366,13 +366,13 @@ And the bulk momentum flowed from chamber to chamber is then:
 double bulk_momentum_flowed_kg_m_per_s = mass_flowed_kg * velocity_m_per_s;
 ```
 
-Given a flow function, where flow always occurs from x to y, where x is the chamber with higher total pressure:
+Given a flow function, where flow always occurs from `x` to `y`, where `x` is the chamber with higher total pressure:
 ```
 void
 flow(struct chamber* x, struct chamber* y, double cross_sectional_flow_area_m2);
 ```
 
-The bulk moles transferred from x to y is defined as:
+The bulk moles transferred from `x` to `y` is defined as:
 ```
 double moles_flowed = mass_flowed_kg / calc_molar_mass_kg_per_mol(x);
 ```
@@ -402,8 +402,9 @@ Momentum between chambers is then conserved by:
 x->gas.bulk_momentum_kg_m_per_s -= bulk_momentum_flowed_kg_m_per_s;
 y->gas.bulk_momentum_kg_m_per_s += bulk_momentum_flowed_kg_m_per_s;
 ```
+Where extra consideration is taken to ensure the chamber's gas momentum does not exceed the medium's speed of sound.
 
-And the downstream chamber, assuming flow always occurs from x to y, has its air, fuel, and combusted ratios mixed with the inflowing gas:
+The downstream chamber, assuming flow always occurs from `x` to `y`, has its air, fuel, and combusted ratios mixed with the inflowing gas:
 
 ```
 y->gas.air_ratio = calc_weighted_average(y->gas.air_ratio, y->gas.moles, x->gas.air_ratio, moles_flowed);
@@ -453,7 +454,7 @@ inject_directly(struct chamber* self)
 ```
 
 With a chamber primed with injected fuel, and the chamber ignited from the top,
-the rate at which the combustion flame burns in the x and y direction (in meters per second)
+the rate at which the combustion flame burns in the `x` and `y` direction (in meters per second)
 is defined as:
 
 ```
@@ -545,7 +546,7 @@ struct piston
 }
 ```
 
-The chamber volume and gas states are tracked internally to match the head radius, and updated per frame.
+The chamber volume and gas states are tracked internally to match the head radius, and updated per cycle.
 The torque produced by the gas within the piston (in newton meters) is defined as:
 
 ```
@@ -655,9 +656,8 @@ Angular velocity is then updated by angular acceleration multiplied by the time 
 angular_velocity_r_per_s += angular_acceleration_r_per_s2 * DT_S;
 ```
 
-For IICE with more than one piston, the torques and moment of inertias for each piston are simply added together.
+For an IICE with more than one piston, the torques and moment of inertias for each piston are simply added together.
 
 ### Source
 
-The source for enism2 is currently not released, but check back for future updates on
-engine modelling, particullary a (hopeful) attempt at a V-config.
+Unavailable! But check back for future updates on engine modelling, particullary a (hopeful) attempt at a V-config.
