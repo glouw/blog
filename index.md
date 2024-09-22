@@ -3,7 +3,7 @@ layout: default
 layout: home
 ---
 
-Programming write ups and such.
+Programming writeups and such.
 
 If you have questions feel free to contact me at my email address below.
 
