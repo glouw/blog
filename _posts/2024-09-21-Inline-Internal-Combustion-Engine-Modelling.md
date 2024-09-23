@@ -10,7 +10,7 @@ Applications include, but are not limited to, game development vehicular audio a
 
 <iframe width="720" height="405" src="https://www.youtube.com/embed/fSB2aZC542A" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-### Defining the Piston Classical Dynamics
+### Defining Piston Kinematics
 
 An inline piston's movement is constrained by its vertical axis. Updating a piston's theta (in radians)
 updates the piston pin's y position (in meters) and its bearing `x` and `y` position (in meters).
@@ -47,7 +47,7 @@ update_position(struct piston* self, const double angular_velocity_r_per_s)
 }
 ```
 
-### Defining the Piston Otto Cycle
+### Defining the Otto Cycle
 
 The piston provides engine torque by igniting a compressed air fuel mixture. This process
 is known as the Otto cycle:
@@ -635,7 +635,7 @@ The total torque produced by the piston is then:
 double total_torque_nm = calc_moment_of_inertia_kg_per_m2(piston) + calc_inertia_torque_nm(piston, angular_velocity_r_per_s);
 ```
 
-### Defining the Engine's Angular Velocity
+### Defining Engine Angular Velocity
 
 The angular acceleration (in radians per second squared) supplied to the engine is:
 
