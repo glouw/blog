@@ -658,6 +658,12 @@ angular_velocity_r_per_s += angular_acceleration_r_per_s2 * DT_S;
 
 For an IICE with more than one piston, the torques and moment of inertias for each piston are simply added together.
 
+###
+
+Total pressure in the exhaust chamber can be sampled and outputted to the sound card at 44100Hz in 512 byte
+samples. The audio buffer size can vary, but 512 bytes at 44100Hz is roughly 90Hz, which allows for
+engine interaction and readings to occur almost 50% faster than your average 60fps game loop.
+
 ### Source
 
 Unavailable! But check back for future updates on engine modelling, particullary a (hopeful) attempt at a V-config.
