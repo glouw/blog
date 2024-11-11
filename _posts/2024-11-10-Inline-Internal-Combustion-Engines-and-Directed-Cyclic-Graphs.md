@@ -2,9 +2,7 @@
 layout: post
 ---
 
-<iframe width="720" height="405" src="https://www.youtube.com/embed/4Kh9dTn4-vQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-
-(I am not on a plane - I just happen to listen to jet white noise while I work).
+<iframe width="720" height="405" src="https://www.youtube.com/embed/v=jX-kl0I_fHk" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 Directed Cyclic Graphs (DCG), when traversed breadth first, happen to model internal combustion fluid sim ordering. Seen above
 is an inline 9 engine with plenum intake left, and four exhaust system, ejecting to the atmosphere right, with a turbo
