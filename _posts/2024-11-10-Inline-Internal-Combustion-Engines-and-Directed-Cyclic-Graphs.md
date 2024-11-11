@@ -6,7 +6,7 @@ layout: post
 
 Directed Cyclic Graphs (DCG), when traversed breadth first, happen to model internal combustion fluid sim ordering. Seen above
 is an inline 9 engine with plenum intake left, and four exhaust system, ejecting to the atmosphere right, with a turbo
-charger making use of latent heat and pressure at the joint collector.
+charger making use of latent heat and pressure of each exhaust system.
 
 While this front end is not connected to the audio generator (just yet) in this post I want to outline that a DCG can,
 in breadth first order, operate node-to-node in a perfectly parallel order, allowing no piston manifold channel to execute
