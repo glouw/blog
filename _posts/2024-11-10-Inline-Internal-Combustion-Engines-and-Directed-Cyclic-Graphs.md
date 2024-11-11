@@ -19,20 +19,22 @@ The conventional flow math, directed by isentropic choked flow, moves gas mass l
 A node (as a parent) holds shared or weak children (next):
 
 ```
+template <typename T>
+using non_unique_ptr = variant<shared_ptr<T>, weak_ptr<T>>;
+
 struct node_t : enable_shared_from_this<node_t>
 {
     unique_ptr<widget_t> widget = {};
-    list<variant<shared_ptr<node_t>, weak_ptr<node_t>>> next = {};
+    list<non_unique_ptr<node_t>> next = {};
 }
+...
 ```
 
 BFS iteration as a public member function serves to operate on the parent (finding a node, rendering a node, etc), and serves
 to operate on parent to child (rendering lines between nodes, flowing from node to node, etc):
 
 ```
-template <typename T>
-using non_unique_ptr = variant<shared_ptr<T>, weak_ptr<T>>;
-
+...
 using handle_node = function<shared_ptr<node_t>(const shared_ptr<node_t>&)>;
 using handle_edge = function<shared_ptr<node_t>(const shared_ptr<node_t>&, const shared_ptr<node_t>&, bool)>;
 
@@ -65,4 +67,5 @@ shared_ptr<node_t> node_t::iterate(const handle_node& handle_node, const handle_
     }
     return nullptr;
 }
+...
 ```
