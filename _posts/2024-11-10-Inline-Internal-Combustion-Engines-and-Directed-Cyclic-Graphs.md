@@ -5,7 +5,7 @@ layout: post
 <iframe width="720" height="405" src="https://www.youtube.com/embed/jX-kl0I_fHk" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 Directed Cyclic Graphs (DCG), when traversed breadth first, happen to model internal combustion fluid sim ordering. Seen above
-is an inline 9 engine with plenum intake left, and four exhaust system, ejecting to the atmosphere right, with a turbo
+is an inline 8 engine with plenum intake left, and four exhaust system, ejecting to the atmosphere right, with a turbo
 charger making use of latent heat and pressure of each exhaust system.
 
 While this front end is not connected to the audio generator (just yet) in this post I want to outline that a DCG can,
