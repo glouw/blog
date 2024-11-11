@@ -30,9 +30,13 @@ BFS iteration as a public member function serves to operate on the parent (findi
 to operate on parent to child (rendering lines between nodes, flowing from node to node, etc):
 
 ```
-shared_ptr<node_t> node_t::iterate(
-    const function<shared_ptr<node_t>(const shared_ptr<node_t>&)>& on_parent,
-    const function<void(const shared_ptr<node_t>&, const shared_ptr<node_t>&, bool)>& on_parent_to_child)
+template <typename T>
+using non_unique_ptr = variant<shared_ptr<T>, weak_ptr<T>>;
+
+using handle_node = function<shared_ptr<node_t>(const shared_ptr<node_t>&)>;
+using handle_edge = function<shared_ptr<node_t>(const shared_ptr<node_t>&, const shared_ptr<node_t>&, bool)>;
+
+shared_ptr<node_t> node_t::iterate(const handle_node& handle_node, const handle_edge& handle_edge)
 {
     queue<shared_ptr<node_t>> q;
     q.push(shared_from_this());
@@ -40,25 +44,23 @@ shared_ptr<node_t> node_t::iterate(
     {
         shared_ptr<node_t> parent = q.front();
         q.pop();
-        if(on_parent(parent))
+        if(handle_node(parent))
         {
             return parent;
         }
-        for(const variant<shared_ptr<node_t>, weak_ptr<node_t>>& node : parent->next)
+        for(const non_unique_ptr<node_t>& node : parent->nodes)
         {
-            bool is_cycling = false;
-            shared_ptr<node_t> child = nullptr;
-            if(const shared_ptr<node_t>* peek = get_if<shared_ptr<node_t>>(&node))
+            if(holds_alternative<shared_ptr<node_t>>(node))
             {
-                child = *peek;
+                shared_ptr<node_t> child = get<shared_ptr<node_t>>(node);
                 q.push(child);
+                handle_edge(parent, child, false);
             }
             else
+            if(shared_ptr<node_t> child = get<weak_ptr<node_t>>(node).lock())
             {
-                is_cycling = true;
-                child = get_if<weak_ptr<node_t>>(&node)->lock();
+                handle_edge(parent, child, true);
             }
-            on_parent_to_child(parent, child, is_cycling);
         }
     }
     return nullptr;
