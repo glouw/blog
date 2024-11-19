@@ -69,3 +69,26 @@ shared_ptr<node_t> node_t::iterate(const handle_node& handle_node, const handle_
 }
 ...
 ```
+
+Where utilization might be defined as:
+
+```
+...
+graph->iterate(
+    [](const std::shared_ptr<node_t>& parent)
+    {
+        parent->widget->do_work();
+        return nullptr;
+    },
+    [](const std::shared_ptr<node_t>& parent, const std::shared_ptr<n
+    {
+        parent->widget->flow(child->volume);
+        return nullptr;
+    }
+);
+...
+```
+
+do_work() performs mechanical and elctrical work on a widget (adiabatic compression,
+spark plug ignition), and flow() performs the transfer of mols, via isentropic flow,
+from one node to the next.
