@@ -36,7 +36,7 @@ to operate on parent to child (rendering lines between nodes, flowing from node 
 ```
 ...
 using handle_node = function<shared_ptr<node_t>(const shared_ptr<node_t>&)>;
-using handle_edge = function<shared_ptr<node_t>(const shared_ptr<node_t>&, const shared_ptr<node_t>&, bool)>;
+using handle_edge = function<shared_ptr<node_t>(const shared_ptr<node_t>&, const shared_ptr<node_t>&)>;
 
 shared_ptr<node_t> node_t::iterate(const handle_node& handle_node, const handle_edge& handle_edge)
 {
@@ -56,12 +56,12 @@ shared_ptr<node_t> node_t::iterate(const handle_node& handle_node, const handle_
             {
                 shared_ptr<node_t> child = get<shared_ptr<node_t>>(node);
                 q.push(child);
-                handle_edge(parent, child, false);
+                handle_edge(parent, child);
             }
             else
             if(shared_ptr<node_t> child = get<weak_ptr<node_t>>(node).lock())
             {
-                handle_edge(parent, child, true);
+                handle_edge(parent, child);
             }
         }
     }
@@ -75,12 +75,12 @@ Where utilization might be defined as:
 ```
 ...
 graph->iterate(
-    [](const std::shared_ptr<node_t>& parent)
+    [](const shared_ptr<node_t>& parent)
     {
         parent->widget->do_work();
         return nullptr;
     },
-    [](const std::shared_ptr<node_t>& parent, const std::shared_ptr<n
+    [](const shared_ptr<node_t>& parent, const shared_ptr<node_t>& child)
     {
         parent->widget->flow(child->volume);
         return nullptr;
