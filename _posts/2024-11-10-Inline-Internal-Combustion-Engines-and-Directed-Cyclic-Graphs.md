@@ -82,7 +82,7 @@ graph->iterate(
     },
     [](const shared_ptr<node_t>& parent, const shared_ptr<node_t>& child)
     {
-        parent->widget->flow(child->volume);
+        parent->widget->flow(child->widget);
         return nullptr;
     }
 );
