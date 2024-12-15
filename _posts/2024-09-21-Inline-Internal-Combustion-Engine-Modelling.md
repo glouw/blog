@@ -342,20 +342,6 @@ calc_specific_gas_constant_j_per_kg_k(struct chamber* self)
 
 ### Defining Mass Transfer Between Chambers
 
-The instantaneous velocity of the gas in the nozzle is derived from the mass flow rate, total temperature, and total pressure of the flow:
-```
-double
-calc_velocity_m_per_s(struct chamber* self, double mass_flow_rate_kg_per_s, double mach_number, double cross_sectional_flow_area_m2)
-{
-    double term1 = mass_flow_rate_kg_per_s * calc_specific_gas_constant_j_per_kg_k(self) * calc_total_temperature_k(self, mach_number);
-    double term2 = calc_total_pressure_pa(self) * cross_sectional_flow_area_m2;
-    return term1 / term2;
-}
-```
-
-The instantaneous velocity does not dictate the bulk velocity of the gas in the upstream or downstream chambers, but serves to
-conserve momentum between the upstream and downstream chambers.
-
 The mass flowed from chamber to chamber is then:
 ```
 double mass_flowed_kg = mass_flow_rate_kg_per_s * DT_S;
@@ -363,7 +349,7 @@ double mass_flowed_kg = mass_flow_rate_kg_per_s * DT_S;
 
 And the bulk momentum flowed from chamber to chamber is then:
 ```
-double bulk_momentum_flowed_kg_m_per_s = mass_flowed_kg * velocity_m_per_s;
+double bulk_momentum_flowed_kg_m_per_s = mass_flowed_kg * nozzle_velocity_m_per_s;
 ```
 
 Given a flow function, where flow always occurs from `x` to `y`, where `x` is the chamber with higher total pressure:
