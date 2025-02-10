@@ -170,30 +170,6 @@ Freeing the list calls free, but ensures the list is cleared prior:
         free(self);
     }
 
-Sorting is best left to the standard library's quick sort since list indexing
-is an O(n) operation. This is accomplished by copying only the data pointers to a cache.
-The cache is then sorted and placed back - in order - in place of the previous node data
-pointers.
-
-    typedef int (*Compare)(const void*, const void* b);
-
-    void Sort(List* list, Compare compare)
-    {
-        void** cache = malloc(list->size * sizeof(*cache));
-        int32_t index = 0;
-        for(Node* node = list->head; node; node = node->next)
-            cache[index++] = node->data;
-        qsort(cache, list->size, sizeof(*cache), compare);
-        index = 0;
-        for(Node* node = list->head; node; node = node->next)
-            node->data = cache[index++];
-        free(cache);
-    }
-
-Although some cache misses may arise due to non-contiguous nature of list nodes allocations,
-node data pointer swapping is cheap, and the data itself is not moved which is highly benificial to
-game engines, for instance, where data pieces reference one another with pointers.
-
 ## Examples
 
 The doubly linked list excelt in generic settings, given _data_ is always
