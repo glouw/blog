@@ -3,4 +3,6 @@ layout: default
 layout: home
 ---
 
-`programming writeups`
+![](images/pfp.jpg)
+
+Programming write-ups and such. Feel free to contact me at my email address below.
