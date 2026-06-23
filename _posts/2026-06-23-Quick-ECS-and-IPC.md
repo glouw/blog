@@ -2,9 +2,9 @@
 layout: post
 ---
 
-An Entity Compoenent System in C23 can generate _incredibly_ optimized SIMD
-instructions on SOA entities while emphasizing maintenance with this X-Macro
-appraoch:
+An Entity Component System (ECS) in C23 can generate _incredibly_ optimized SIMD
+instructions on Struct of Arrays (SOA) entities while emphasizing maintenance with this X-Macro
+approach:
 
 ```
 #define ent_d(exec) \
@@ -78,10 +78,9 @@ and not `g_ents_size` to eliminate SIMD tail branching:
     11fd:   ret
 ```
 
-In practice whether this is faster than processing only `g_ents_size` is up for
-debate, but the generated assembly is nicer.
+In practice we'd use `g_ents_size`, but the generated assembly is nicer for the format of this post.
 
-### A Tale of IPC:
+### A Tale of Instructions Per Cycle (IPC):
 
 The SOA move has IPC of 1.5:
 ```
@@ -99,7 +98,7 @@ The SOA move has IPC of 1.5:
     0.122078331 seconds time elapsed
 ```
 
-Swapping the layout of `g_ents` from SOA to AOS improves IPC to 2.7:
+Swapping the layout of `g_ents` from SOA to Array of Structs (AOS) improves IPC to 2.7:
 
 ```
  Performance counter stats for './a.out 10000':
@@ -116,7 +115,7 @@ Swapping the layout of `g_ents` from SOA to AOS improves IPC to 2.7:
     0.631062773 seconds time elapsed
 ```
 
-The hardware is certainly saturated with more busy work, but the cycle count and wall clock time is nearly 5x in size.
+The hardware is certainly saturated with more work, but the cycle count and wall clock time is nearly 5x in size.
 
 Inspecting the AOS move:
 
@@ -153,4 +152,5 @@ Inspecting the AOS move:
     1365:   ret
 ```
 
-More partial loads, more scalar ops, more register shuffles, more partial writes. IPC does not equal performance.
+We see more partial loads, more scalar ops, more register shuffles, more partial writes. More instructions might be in flight per cycle,
+but IPC does not equal performance when memory _can be_ streamed and processed for less instructions per cycle.
