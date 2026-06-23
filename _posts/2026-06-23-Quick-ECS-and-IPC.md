@@ -82,7 +82,7 @@ In practice we'd use `g_ents_size`, but the generated assembly is nicer for the 
 
 ### A Tale of Instructions Per Cycle (IPC):
 
-The SOA move has IPC of 1.5:
+The SOA move has an IPC of 1.5:
 ```
  Performance counter stats for './a.out 10000':
 
@@ -115,7 +115,7 @@ Swapping the layout of `g_ents` from SOA to Array of Structs (AOS) improves IPC 
     0.631062773 seconds time elapsed
 ```
 
-The hardware is certainly saturated with more work, but the cycle count and wall clock time is nearly 5x in size.
+The hardware is certainly saturated with more work, *_but_* the cycle count and wall clock time is nearly 5x in size.
 
 Inspecting the AOS move:
 
